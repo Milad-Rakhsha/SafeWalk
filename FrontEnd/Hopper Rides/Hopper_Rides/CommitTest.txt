@@ -1,0 +1,2 @@
+﻿Commit test for VS2015
+PatricK
