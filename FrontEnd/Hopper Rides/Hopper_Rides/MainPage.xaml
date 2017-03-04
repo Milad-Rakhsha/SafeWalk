@@ -1,11 +1,44 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Hopper_Rides"
-             x:Class="Hopper_Rides.MainPage">
+             x:Class="Hopper_Rides.MainPage"
+             BackgroundColor="Gray">
+    <StackLayout Spacing="200" x:Name="layout"
+        VerticalOptions="Center">
+        <Label Text="Welcome to Hopper Rides!"
+           VerticalOptions="Center"
+           BackgroundColor="Silver"
+           TextColor="Black"
+           HorizontalOptions="CenterAndExpand" />
 
-	<Label Text="Welcome to Xamarin Forms!" 
-           VerticalOptions="Center" 
-           HorizontalOptions="Center" />
+        <StackLayout Spacing="0">
+            <Entry Text=" Username"
+           VerticalOptions="Center"
+           HorizontalOptions="CenterAndExpand"               
+           BackgroundColor="Silver"
+           TextColor="Black"    
+           WidthRequest="100"      
+               />
+                        
+            <Entry Text="Password"
+           IsPassword="True"
+           VerticalOptions="Center"
+           HorizontalOptions="CenterAndExpand"
+           BackgroundColor="Silver"
+           TextColor="Black"    
+           WidthRequest="100"      
+               />
+        </StackLayout>
+        
+        <Button Text="Login"
+           VerticalOptions="Center"
+           HorizontalOptions="CenterAndExpand"    
+           TextColor="Black"  
+           BackgroundColor="Silver"     
+                
+                />
+
+    </StackLayout>
 
 </ContentPage>
