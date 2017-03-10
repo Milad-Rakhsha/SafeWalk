@@ -12,6 +12,16 @@ namespace Hopper_Rides
 		public MainPage()
 		{
 			InitializeComponent();
+            
+               
 		}
+
+        void onLogin(Object sender, EventArgs e)
+        {
+            //OK need to replace this with a call to the new map screen.
+            Content = new Label{
+                Text = "It's Clicked"           
+            };
+        }
 	}
 }
