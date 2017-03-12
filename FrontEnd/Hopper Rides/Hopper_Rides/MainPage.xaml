@@ -38,6 +38,13 @@
            BackgroundColor="Silver"     
            Clicked="onLogin"     
                 />
+        <Button Text="TestSubmit"
+           VerticalOptions="Center"
+           HorizontalOptions="CenterAndExpand"    
+           TextColor="Black"  
+           BackgroundColor="Silver"     
+           Clicked="sendRequest"     
+                />
 
     </StackLayout>
 
