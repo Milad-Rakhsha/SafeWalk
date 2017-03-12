@@ -19,9 +19,10 @@ namespace Hopper_Rides
         void onLogin(Object sender, EventArgs e)
         {
             //OK need to replace this with a call to the new map screen.
-            Content = new Label{
-                Text = "It's Clicked"           
-            };
+            //Content = new Label{
+            //    Text = "It's Clicked"           
+            //};
+            App.Current.MainPage = new MapPage();
         }
 	}
 }
