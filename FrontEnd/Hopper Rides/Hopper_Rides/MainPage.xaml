@@ -36,7 +36,7 @@
            HorizontalOptions="CenterAndExpand"    
            TextColor="Black"  
            BackgroundColor="Silver"     
-                
+           Clicked="onLogin"     
                 />
 
     </StackLayout>
