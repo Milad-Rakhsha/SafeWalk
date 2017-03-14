@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:Hopper_Rides"
              x:Class="Hopper_Rides.MainPage"
              BackgroundColor="Gray">
-    <StackLayout Spacing="200" x:Name="layout"
+    <StackLayout Spacing="150" x:Name="layout"
         VerticalOptions="Center">
         <Label Text="Welcome to Hopper Rides!"
            VerticalOptions="Center"
@@ -30,13 +30,21 @@
            WidthRequest="100"      
                />
         </StackLayout>
-        
-        <Button Text="Login"
+
+		<Button Text="Login"
            VerticalOptions="Center"
            HorizontalOptions="CenterAndExpand"    
            TextColor="Black"  
            BackgroundColor="Silver"     
-                
+           Clicked="onLogin"
+			/>
+
+		<Button Text="TestSubmit"
+           VerticalOptions="Center"
+           HorizontalOptions="CenterAndExpand"    
+           TextColor="Black"  
+           BackgroundColor="Silver"     
+           Clicked="sendRequest" 		
                 />
 
     </StackLayout>
