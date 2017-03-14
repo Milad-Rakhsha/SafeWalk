@@ -13,14 +13,5 @@ namespace Hopper_Rides
 		{
 			InitializeComponent();
 		}
-
-		void onLogin(Object sender, EventArgs e) {
-			Content = new Label
-			{
-				Text = "It's Clicked",
-				VerticalOptions = LayoutOptions.CenterAndExpand,
-				HorizontalOptions = LayoutOptions.CenterAndExpand
-            };
-		}
 	}
 }
