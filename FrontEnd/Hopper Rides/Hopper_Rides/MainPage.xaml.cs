@@ -30,12 +30,8 @@ namespace Hopper_Rides
             }
             else
             {
-                Content = new Label
-                {
-                    Text = "This is a rider",
-                    VerticalTextAlignment = TextAlignment.Center,
-                    HorizontalTextAlignment = TextAlignment.Center
-                };
+                //This is a rider
+                App.Current.MainPage = new MapPage();
             }
             
          }
