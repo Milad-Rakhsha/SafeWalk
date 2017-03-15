@@ -13,7 +13,8 @@
            HorizontalOptions="CenterAndExpand" />
 
         <StackLayout Spacing="0">
-            <Entry Text=" Username"
+            <Entry x:Name="UsernameEntry"
+           Placeholder=" Username"
            VerticalOptions="Center"
            HorizontalOptions="CenterAndExpand"               
            BackgroundColor="Silver"
@@ -21,7 +22,8 @@
            WidthRequest="100"      
                />
                         
-            <Entry Text="Password"
+            <Entry x:Name="PasswordEntry"
+           Placeholder="Password"
            IsPassword="True"
            VerticalOptions="Center"
            HorizontalOptions="CenterAndExpand"

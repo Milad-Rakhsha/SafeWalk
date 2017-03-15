@@ -17,14 +17,27 @@ namespace Hopper_Rides
 			InitializeComponent();
 		}
 
-		void onLogin(Object sender, EventArgs e)
+        void onLogin(Object sender, EventArgs e)
          {
-             //OK need to replace this with a call to the new map screen.
-             Content = new Label{
-                Text = "It's Clicked",
-				VerticalTextAlignment = TextAlignment.Center,
-				HorizontalTextAlignment = TextAlignment.Center           
-             };
+            if (UsernameEntry.Text.Equals("Driver", StringComparison.OrdinalIgnoreCase))
+            {
+                Content = new Label
+                {
+                    Text = "This is a driver",
+                    VerticalTextAlignment = TextAlignment.Center,
+                    HorizontalTextAlignment = TextAlignment.Center
+                };
+            }
+            else
+            {
+                Content = new Label
+                {
+                    Text = "This is a rider",
+                    VerticalTextAlignment = TextAlignment.Center,
+                    HorizontalTextAlignment = TextAlignment.Center
+                };
+            }
+            
          }
 
 		async void sendRequest(Object sender, EventArgs e)
