@@ -19,13 +19,15 @@ namespace Hopper_Rides
 
 		void onLogin(Object sender, EventArgs e)
          {
-             //OK need to replace this with a call to the new map screen.
-             Content = new Label{
-                Text = "It's Clicked",
-				VerticalTextAlignment = TextAlignment.Center,
-				HorizontalTextAlignment = TextAlignment.Center           
-             };
-         }
+			/*
+			Content = new Label{
+			   Text = "It's Clicked",
+			   VerticalTextAlignment = TextAlignment.Center,
+			   HorizontalTextAlignment = TextAlignment.Center           
+			};
+			*/
+			App.Current.MainPage = new MapPage();
+		}
 
 		async void sendRequest(Object sender, EventArgs e)
 		{
