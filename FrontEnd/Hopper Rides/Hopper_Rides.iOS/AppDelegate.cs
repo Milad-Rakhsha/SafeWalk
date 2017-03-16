@@ -23,6 +23,8 @@ namespace Hopper_Rides.iOS
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
 			global::Xamarin.Forms.Forms.Init();
+
+            //Required for use of maps in PCL
 			Xamarin.FormsMaps.Init();
 			LoadApplication(new App());
 

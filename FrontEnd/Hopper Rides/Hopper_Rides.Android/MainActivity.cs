@@ -20,6 +20,8 @@ namespace Hopper_Rides.Droid
 			base.OnCreate(bundle);
 
 			global::Xamarin.Forms.Forms.Init(this, bundle);
+
+            //Required for use of maps in PCL
 			Xamarin.FormsMaps.Init(this, bundle);
 			LoadApplication(new App());
 		}

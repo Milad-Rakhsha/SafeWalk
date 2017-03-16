@@ -1,5 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.HopperRides.UWM" android:installLocation="auto" android:versionCode="1" android:versionName="hopperrides">
+	<!-- This package name can be changed later if necessary, but not after the app has been published to the GP store -->
 	<uses-sdk android:minSdkVersion="15" />
-	<application android:label="Hopper_Rides.Android"></application>
+	<!-- Permissions for Map use -->
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+	<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<application android:label="Hopper_Rides.Android">
+		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyB_u9eSBPoI7HreSUxzn8B9jetgLupw0Do" />
+		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+	</application>
 </manifest>

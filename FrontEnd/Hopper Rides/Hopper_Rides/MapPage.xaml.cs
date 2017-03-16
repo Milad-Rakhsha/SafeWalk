@@ -14,8 +14,25 @@ namespace Hopper_Rides
 	public partial class MapPage : ContentPage
 	{
 		public MapPage()
-		{	
-			InitializeComponent();
+		{
+            //Seems to work without this
+            //InitializeComponent();
+
+            //Initialize Map with location, zoom, and size of the map
+            var map = new Map(
+            MapSpan.FromCenterAndRadius(
+                    new Position(43.068152, -89.409759), Distance.FromMiles(1)))
+            {
+                IsShowingUser = true,
+                HeightRequest = 100,
+                WidthRequest = 960,
+                VerticalOptions = LayoutOptions.FillAndExpand
+            };
+
+            //Not yet sure what this part does...
+            var stack = new StackLayout { Spacing = 0 };
+            stack.Children.Add(map);
+            Content = stack;
 
 		}
 	}

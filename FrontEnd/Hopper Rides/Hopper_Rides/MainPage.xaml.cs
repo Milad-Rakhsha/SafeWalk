@@ -19,20 +19,30 @@ namespace Hopper_Rides
 
         void onLogin(Object sender, EventArgs e)
          {
-            if (UsernameEntry.Text.Equals("Driver", StringComparison.OrdinalIgnoreCase))
+            try
             {
-                Content = new Label
+                //TODO: App crashes when UsernameEntry is left blank.
+                //The try-catch block remedies this for the time being
+                if (UsernameEntry.Text.Equals("Driver", StringComparison.OrdinalIgnoreCase))
                 {
-                    Text = "This is a driver",
-                    VerticalTextAlignment = TextAlignment.Center,
-                    HorizontalTextAlignment = TextAlignment.Center
-                };
+                    Content = new Label
+                    {
+                        Text = "This is a driver",
+                        VerticalTextAlignment = TextAlignment.Center,
+                        HorizontalTextAlignment = TextAlignment.Center
+                    };
+                }
+                else
+                {
+                    //This is a rider
+                    App.Current.MainPage = new MapPage();
+                }
             }
-            else
+            catch (Exception)
             {
-                //This is a rider
                 App.Current.MainPage = new MapPage();
             }
+            
             
          }
 
