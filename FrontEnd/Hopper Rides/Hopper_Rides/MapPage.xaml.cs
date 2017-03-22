@@ -29,6 +29,13 @@ namespace Hopper_Rides
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
 
+			var pin = new Pin()
+			{
+				Position = new Position(43.068152, -89.409759),
+				Label = "You are here!"
+			};
+
+			map.Pins.Add(pin);
             //Not yet sure what this part does...
             var stack = new StackLayout { Spacing = 0 };
             stack.Children.Add(map);

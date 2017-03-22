@@ -11,7 +11,7 @@
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<application android:label="Hopper_Rides.Android">
-		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyB_u9eSBPoI7HreSUxzn8B9jetgLupw0Do" />
+		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDyPwiKRtWh0tizNIFZSjo9nOByzuvUqug" />
 		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 	</application>
 </manifest>
