@@ -35,10 +35,18 @@ namespace Hopper_Rides
 				Label = "You are here!"
 			};
 
+			var dest = new Entry
+			{
+				Text = "Where are you going?",
+				//VerticalTextAlignment = TextAlignment.Center,
+				HorizontalTextAlignment = TextAlignment.Center
+			};
+
 			map.Pins.Add(pin);
             //Not yet sure what this part does...
             var stack = new StackLayout { Spacing = 0 };
-            stack.Children.Add(map);
+			stack.Children.Add(dest);
+			stack.Children.Add(map);			
             Content = stack;
 
 		}

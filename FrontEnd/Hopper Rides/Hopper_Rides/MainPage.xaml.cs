@@ -25,13 +25,8 @@ namespace Hopper_Rides
                 //The try-catch block remedies this for the time being
                 if (UsernameEntry.Text.Equals("Driver", StringComparison.OrdinalIgnoreCase))
                 {
-                    Content = new Label
-                    {
-                        Text = "This is a driver",
-                        VerticalTextAlignment = TextAlignment.Center,
-                        HorizontalTextAlignment = TextAlignment.Center
-                    };
-                }
+					App.Current.MainPage = new DriverMapPage();
+				}
                 else
                 {
                     //This is a rider
