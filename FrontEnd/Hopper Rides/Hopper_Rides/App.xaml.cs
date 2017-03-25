@@ -13,7 +13,7 @@ namespace Hopper_Rides
 		{
 			InitializeComponent();
 
-			MainPage = new Hopper_Rides.MainPage();
+			MainPage = new NavigationPage(new Hopper_Rides.MainPage());
 		}
 
 		protected override void OnStart()

@@ -15,31 +15,21 @@ namespace Hopper_Rides
 		public MainPage()
 		{
 			InitializeComponent();
+            Title = "Welcome to Hopper Rides!";
 		}
 
-        void onLogin(Object sender, EventArgs e)
+        async void onLogin(Object sender, EventArgs e)
          {
-            try
+            if (!String.IsNullOrEmpty(UsernameEntry.Text) && UsernameEntry.Text.Equals("Driver", StringComparison.OrdinalIgnoreCase))
             {
-                //TODO: App crashes when UsernameEntry is left blank.
-                //The try-catch block remedies this for the time being
-                if (UsernameEntry.Text.Equals("Driver", StringComparison.OrdinalIgnoreCase))
-                {
-					App.Current.MainPage = new DriverMapPage();
-				}
-                else
-                {
-                    //This is a rider
-                    App.Current.MainPage = new MapPage();
-                }
+                await Navigation.PushModalAsync(new DriverMapPage());
             }
-            catch (Exception)
+            else
             {
-                App.Current.MainPage = new MapPage();
+                //This is a rider
+                await Navigation.PushModalAsync(new MapPage());
             }
-            
-            
-         }
+        }
 
 		async void sendRequest(Object sender, EventArgs e)
 		{

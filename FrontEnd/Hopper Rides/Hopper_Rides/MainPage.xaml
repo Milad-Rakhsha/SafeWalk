@@ -6,11 +6,6 @@
              BackgroundColor="Gray">
     <StackLayout Spacing="150" x:Name="layout"
         VerticalOptions="Center">
-        <Label Text="Welcome to Hopper Rides!"
-           VerticalOptions="Center"
-           BackgroundColor="Silver"
-           TextColor="Black"
-           HorizontalOptions="CenterAndExpand" />
 
         <StackLayout Spacing="0">
             <Entry x:Name="UsernameEntry"
