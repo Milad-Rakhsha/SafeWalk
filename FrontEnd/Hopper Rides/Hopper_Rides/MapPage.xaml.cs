@@ -10,11 +10,11 @@ using Xamarin.Forms.Maps;
 
 namespace Hopper_Rides
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class MapPage : ContentPage
-	{
-		public MapPage()
-		{
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class MapPage : ContentPage
+    {
+        public MapPage()
+        {
             //Seems to work without this
             //InitializeComponent();
 
@@ -29,26 +29,59 @@ namespace Hopper_Rides
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
 
-			var pin = new Pin()
-			{
-				Position = new Position(43.068152, -89.409759),
-				Label = "You are here!"
-			};
+            var pin = new Pin()
+            {
+                Position = new Position(43.068152, -89.409759),
+                Label = "You are here!"
+            };
 
-			var dest = new Entry
-			{
-				Text = "Where are you going?",
-				//VerticalTextAlignment = TextAlignment.Center,
-				HorizontalTextAlignment = TextAlignment.Center
-			};
+            var dest = new Entry
+            {
+                Placeholder = "Where are you going?",
+                //VerticalTextAlignment = TextAlignment.Center,
+                HorizontalTextAlignment = TextAlignment.Center,
 
-			map.Pins.Add(pin);
+            };
+
+            map.Pins.Add(pin);
+
+            //Event handler when Enter pressed from search bar
+            dest.Completed += async (sender, e) =>
+            {
+                var text = ((Entry)sender).Text;
+                Geocoder geo = new Geocoder();
+                IEnumerable<Position> positions = await geo.GetPositionsForAddressAsync(text);
+                if (positions.Count() == 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("Bad Address");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("Position: " + positions.First().Latitude + ", " + positions.First().Longitude);
+
+                    //Place new pin
+                    var newPin = new Pin
+                    {
+                        Position = positions.First(),
+                        Label = "Destination"
+                    };
+
+                    map.Pins.Add(newPin);
+
+                    //Find new center of pins and largest radius for new map position
+                    Position newCenter = PinFunctions.CenterPosition(map);
+                    map.MoveToRegion(MapSpan.FromCenterAndRadius(newCenter, PinFunctions.LargestRadius(map, newCenter)));
+                }
+
+                dest.Text = "";
+            };
+
             //Not yet sure what this part does...
             var stack = new StackLayout { Spacing = 0 };
-			stack.Children.Add(dest);
-			stack.Children.Add(map);			
+            stack.Children.Add(dest);
+            stack.Children.Add(map);
             Content = stack;
 
-		}
-	}
+        }
+    }
 }
