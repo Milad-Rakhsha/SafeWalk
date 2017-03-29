@@ -30,6 +30,16 @@ namespace TheHopperService.Models
                 new AttributeToColumnAnnotationConvention<TableColumnAttribute, string>(
                     "ServiceTableColumn", (property, attributes) => attributes.Single().ColumnType.ToString()));
         }
+
+        public System.Data.Entity.DbSet<TheHopperService.Models.Rider> Riders { get; set; }
+
+        public System.Data.Entity.DbSet<TheHopperService.Models.Driver> Drivers { get; set; }
+
+        public System.Data.Entity.DbSet<TheHopperService.Models.ActiveRequest> ActiveRequests { get; set; }
+
+        public System.Data.Entity.DbSet<TheHopperService.Models.HistoricalRequest> HistoricalRequests { get; set; }
+
+        public System.Data.Entity.DbSet<TheHopperService.Models.RiderReview> RiderReviews { get; set; }
     }
 
 }
