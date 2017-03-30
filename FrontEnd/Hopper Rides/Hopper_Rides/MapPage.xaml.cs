@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http;
+
+using Newtonsoft.Json;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -17,6 +20,8 @@ namespace Hopper_Rides
         {
             //Seems to work without this
             //InitializeComponent();
+
+            string googleKey = "AIzaSyA3aaKi6HVMDLcvez0EGcMn6Fsngl5lC5g";
 
             //Initialize Map with location, zoom, and size of the map
             var map = new Map(
@@ -49,20 +54,30 @@ namespace Hopper_Rides
             dest.Completed += async (sender, e) =>
             {
                 var text = ((Entry)sender).Text;
-                Geocoder geo = new Geocoder();
-                IEnumerable<Position> positions = await geo.GetPositionsForAddressAsync(text);
-                if (positions.Count() == 0)
+
+                //Send location request to Google and get JSON response
+                string url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + ((string)text) + "&key=" + googleKey;
+                var jsonResponse = await SendRequest(url);
+
+                if(!jsonResponse.IsSuccessStatusCode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Bad Address");
+                    System.Diagnostics.Debug.WriteLine("Bad Address?");
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine("Position: " + positions.First().Latitude + ", " + positions.First().Longitude);
+                    string content = await jsonResponse.Content.ReadAsStringAsync();
+                    
+                    System.Diagnostics.Debug.WriteLine(content);
+
+                    //Parse JSON data to extract necessary coordinates
+                    JsonResponse parsedResponse = JsonConvert.DeserializeObject<JsonResponse>(content);
+                    double latitude = parsedResponse.Results[0].Geo.Loc.Latitude;
+                    double longitude = parsedResponse.Results[0].Geo.Loc.Longitude;
 
                     //Place new pin
                     var newPin = new Pin
                     {
-                        Position = positions.First(),
+                        Position = new Position(latitude, longitude),
                         Label = "Destination"
                     };
 
@@ -82,6 +97,16 @@ namespace Hopper_Rides
             stack.Children.Add(map);
             Content = stack;
 
+        }
+
+        //Sends HTTP request using given url
+        private async Task<HttpResponseMessage> SendRequest(string url)
+        {
+            HttpClient client = new HttpClient();
+            var uri = new Uri(url);
+
+            HttpResponseMessage response = await client.GetAsync(uri);
+            return response;
         }
     }
 }
