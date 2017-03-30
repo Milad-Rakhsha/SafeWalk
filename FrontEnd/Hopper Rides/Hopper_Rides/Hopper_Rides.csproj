@@ -41,7 +41,6 @@
     <Compile Include="DriverMapPage.xaml.cs">
       <DependentUpon>DriverMapPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JsonResponse.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -49,7 +48,6 @@
       <DependentUpon>MapPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\User.cs" />
-    <Compile Include="PinFunctions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
