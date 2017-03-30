@@ -6,7 +6,6 @@ using System.Web.Http;
 using Microsoft.Azure.Mobile.Server;
 using Microsoft.Azure.Mobile.Server.Authentication;
 using Microsoft.Azure.Mobile.Server.Config;
-using TheHopperService.DataObjects;
 using TheHopperService.Models;
 using Owin;
 
@@ -26,7 +25,7 @@ namespace TheHopperService
                 .ApplyTo(config);
 
             // Use Entity Framework Code First to create database tables based on your DbContext
-            Database.SetInitializer(new TheHopperInitializer());
+ 
 
             // To prevent Entity Framework from modifying your database schema, use a null database initializer
             // Database.SetInitializer<TheHopperContext>(null);
@@ -49,23 +48,7 @@ namespace TheHopperService
         }
     }
 
-    public class TheHopperInitializer : CreateDatabaseIfNotExists<TheHopperContext>
-    {
-        protected override void Seed(TheHopperContext context)
-        {
-            List<TodoItem> todoItems = new List<TodoItem>
-            {
-                new TodoItem { Id = Guid.NewGuid().ToString(), Text = "First item", Complete = false },
-                new TodoItem { Id = Guid.NewGuid().ToString(), Text = "Second item", Complete = false },
-            };
-
-            foreach (TodoItem todoItem in todoItems)
-            {
-                context.Set<TodoItem>().Add(todoItem);
-            }
-
-            base.Seed(context);
-        }
-    }
+    
+    
 }
 
