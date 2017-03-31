@@ -22,7 +22,7 @@ namespace Hopper_Rides.Droid
 			global::Xamarin.Forms.Forms.Init(this, bundle);
 
             //Required for use of maps in PCL
-			Xamarin.FormsMaps.Init(this, bundle);
+			Xamarin.FormsGoogleMaps.Init(this, bundle);
 			LoadApplication(new App());
 		}
 	}

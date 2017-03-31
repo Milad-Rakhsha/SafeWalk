@@ -25,8 +25,9 @@ namespace Hopper_Rides.iOS
 			global::Xamarin.Forms.Forms.Init();
 
             //Required for use of maps in PCL
-			Xamarin.FormsMaps.Init();
-			LoadApplication(new App());
+			Xamarin.FormsGoogleMaps.Init("AIzaSyA3aaKi6HVMDLcvez0EGcMn6Fsngl5lC5g");
+
+            LoadApplication(new App());
 
 			return base.FinishedLaunching(app, options);
 		}
