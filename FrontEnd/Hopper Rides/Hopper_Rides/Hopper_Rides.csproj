@@ -48,6 +48,11 @@
     <Compile Include="MapPage.xaml.cs">
       <DependentUpon>MapPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\ActiveRequest.cs" />
+    <Compile Include="Model\Driver.cs" />
+    <Compile Include="Model\HistoricalRequest.cs" />
+    <Compile Include="Model\Rider.cs" />
+    <Compile Include="Model\RiderReview.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="PinFunctions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,6 +68,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Mono.Android">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\MonoAndroid\v7.1\Mono.Android.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.10.0.1\lib\portable-net45+win8+wpa81+wp8\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>

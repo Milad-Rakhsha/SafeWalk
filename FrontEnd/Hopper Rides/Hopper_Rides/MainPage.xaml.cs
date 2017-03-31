@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Org.Apache.Http.Client.Methods;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,18 +33,27 @@ namespace Hopper_Rides
             }
         }
 
+
+
+
 		async void sendRequest(Object sender, EventArgs e)
 		{
 			using (var client = new HttpClient())
 			{
-				string json = "{ \"Something\": \"Hello\" }";
 
-				var content = new StringContent(json, Encoding.UTF8, "application/json");
-				var response = await client.PostAsync("http://thehopper.azurewebsites.net/", content);
+
+
+				string json = "{ \"Something\": \"Hello\" }";
+				var content = new StringContent(json, Encoding.UTF8, "text/html");
+				client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
+				var response = await client.PostAsync("http://thehopper.azurewebsites.net/api/values", content);
 				var responseString = await response.Content.ReadAsStringAsync();
 				Debug.WriteLine(responseString);
 
-			}
+
+			}		
+
+			
 		}
 	}
 }
