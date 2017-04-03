@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Org.Apache.Http.Client.Methods;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -8,8 +9,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using Newtonsoft.Json;
-
 
 namespace Hopper_Rides
 {
@@ -39,39 +38,18 @@ namespace Hopper_Rides
 
 		async void sendRequest(Object sender, EventArgs e)
 		{
-
-
-
 			using (var client = new HttpClient())
 			{
 
-	
+
+
 				string json = "{ \"Something\": \"Hello\" }";
 				var content = new StringContent(json, Encoding.UTF8, "text/html");
 				client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
-				var response = await client.GetAsync("http://thehopper.azurewebsites.net/api/riders/1");
+				var response = await client.PostAsync("http://thehopper.azurewebsites.net/api/values", content);
 				var responseString = await response.Content.ReadAsStringAsync();
-				//Debug.WriteLine(responseString);
-				Hopper_Rides.Models.Rider rider = JsonConvert.DeserializeObject<Hopper_Rides.Models.Rider>(responseString);
-				Debug.WriteLine(rider.FirstName);
-				Debug.WriteLine(rider.LastName);
-				Debug.WriteLine(rider.PhoneNumber);
-				Debug.WriteLine(rider.Email);
+				Debug.WriteLine(responseString);
 
-				// Make the object you want
-				Hopper_Rides.Models.Rider newRider = new Hopper_Rides.Models.Rider();
-				newRider.FirstName = "Kyle";
-				newRider.FirstName = "Steiger";
-				newRider.Email = "ksteiger@wisc.edu";
-				newRider.PhoneNumber = "608-333-6753";
-				//Serialize it
-				string ser_obj = JsonConvert.SerializeObject(newRider);
-
-				var content_post = new StringContent(ser_obj, Encoding.UTF8, "text/json");
-				//client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
-				var response_post = await client.PostAsync("http://thehopper.azurewebsites.net/api/riders/3",content_post);
-				var responseString_post = await response_post.Content.ReadAsStringAsync();
-				Debug.WriteLine(responseString_post);
 
 			}		
 
