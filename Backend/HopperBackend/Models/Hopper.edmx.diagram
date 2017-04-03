@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="cb6f7b977a8c4982b531892184ae72f5" Name="Diagram1">
+        <EntityTypeShape EntityType="HopperModel.ActiveRequest" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopperModel.Driver" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopperModel.HistoricalRequest" Width="1.5" PointX="6" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopperModel.Rider" Width="1.5" PointX="0.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopperModel.RiderReview" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopperModel.sysdiagram" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopperModel.todoitem" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="HopperModel.FK_Active_Driver" ManuallyRouted="false" />
+        <AssociationConnector Association="HopperModel.FK_Active_Rider" ManuallyRouted="false" />
+        <AssociationConnector Association="HopperModel.FK_Historical_Driver" ManuallyRouted="false" />
+        <AssociationConnector Association="HopperModel.FK_Reveiw_Driver" ManuallyRouted="false" />
+        <AssociationConnector Association="HopperModel.FK_Historical_Rider" ManuallyRouted="false" />
+        <AssociationConnector Association="HopperModel.FK_Reveiw_Rider" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

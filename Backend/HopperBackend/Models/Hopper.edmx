@@ -1,0 +1,508 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="HopperModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ActiveRequest">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="StartTime" Type="datetime" />
+          <Property Name="EndTime" Type="datetime" />
+          <Property Name="StartLocation" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="EndLocation" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="NumPassangers" Type="int" Nullable="false" />
+          <Property Name="Comment" Type="varchar(max)" />
+          <Property Name="DriverID" Type="int" Nullable="false" />
+          <Property Name="RiderID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Driver">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="25" />
+          <Property Name="LastName" Type="varchar" MaxLength="25" />
+          <Property Name="Email" Type="varchar" MaxLength="254" />
+          <Property Name="PhoneNumber" Type="varchar" MaxLength="25" />
+          <Property Name="VenmoID" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="HistoricalRequest">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="StartTime" Type="datetime" />
+          <Property Name="EndTime" Type="datetime" />
+          <Property Name="StartLocation" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="EndLocation" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="NumPassangers" Type="int" Nullable="false" />
+          <Property Name="Comment" Type="varchar(max)" />
+          <Property Name="DriverID" Type="int" Nullable="false" />
+          <Property Name="RiderID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rider">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="25" />
+          <Property Name="LastName" Type="varchar" MaxLength="25" />
+          <Property Name="Email" Type="varchar" MaxLength="254" />
+          <Property Name="PhoneNumber" Type="varchar" MaxLength="25" />
+        </EntityType>
+        <EntityType Name="RiderReview">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Rateing" Type="int" />
+          <Property Name="Comment" Type="varchar(max)" />
+          <Property Name="DriverID" Type="int" Nullable="false" />
+          <Property Name="RiderID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="todoitem">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="version" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="createdAt" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="updatedAt" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="deleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Active_Driver">
+          <End Role="Driver" Type="Self.Driver" Multiplicity="1" />
+          <End Role="ActiveRequest" Type="Self.ActiveRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Driver">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ActiveRequest">
+              <PropertyRef Name="DriverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Active_Rider">
+          <End Role="Rider" Type="Self.Rider" Multiplicity="1" />
+          <End Role="ActiveRequest" Type="Self.ActiveRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rider">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ActiveRequest">
+              <PropertyRef Name="RiderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Historical_Driver">
+          <End Role="Driver" Type="Self.Driver" Multiplicity="1" />
+          <End Role="HistoricalRequest" Type="Self.HistoricalRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Driver">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HistoricalRequest">
+              <PropertyRef Name="DriverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Historical_Rider">
+          <End Role="Rider" Type="Self.Rider" Multiplicity="1" />
+          <End Role="HistoricalRequest" Type="Self.HistoricalRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rider">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HistoricalRequest">
+              <PropertyRef Name="RiderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reveiw_Driver">
+          <End Role="Driver" Type="Self.Driver" Multiplicity="1" />
+          <End Role="RiderReview" Type="Self.RiderReview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Driver">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RiderReview">
+              <PropertyRef Name="DriverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reveiw_Rider">
+          <End Role="Rider" Type="Self.Rider" Multiplicity="1" />
+          <End Role="RiderReview" Type="Self.RiderReview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rider">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RiderReview">
+              <PropertyRef Name="RiderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HopperModelStoreContainer">
+          <EntitySet Name="ActiveRequest" EntityType="Self.ActiveRequest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Driver" EntityType="Self.Driver" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HistoricalRequest" EntityType="Self.HistoricalRequest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rider" EntityType="Self.Rider" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RiderReview" EntityType="Self.RiderReview" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="todoitem" EntityType="Self.todoitem" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Active_Driver" Association="Self.FK_Active_Driver">
+            <End Role="Driver" EntitySet="Driver" />
+            <End Role="ActiveRequest" EntitySet="ActiveRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Active_Rider" Association="Self.FK_Active_Rider">
+            <End Role="Rider" EntitySet="Rider" />
+            <End Role="ActiveRequest" EntitySet="ActiveRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Historical_Driver" Association="Self.FK_Historical_Driver">
+            <End Role="Driver" EntitySet="Driver" />
+            <End Role="HistoricalRequest" EntitySet="HistoricalRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Historical_Rider" Association="Self.FK_Historical_Rider">
+            <End Role="Rider" EntitySet="Rider" />
+            <End Role="HistoricalRequest" EntitySet="HistoricalRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reveiw_Driver" Association="Self.FK_Reveiw_Driver">
+            <End Role="Driver" EntitySet="Driver" />
+            <End Role="RiderReview" EntitySet="RiderReview" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reveiw_Rider" Association="Self.FK_Reveiw_Rider">
+            <End Role="Rider" EntitySet="Rider" />
+            <End Role="RiderReview" EntitySet="RiderReview" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HopperModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ActiveRequest">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="StartTime" Type="DateTime" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Precision="3" />
+          <Property Name="StartLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EndLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NumPassangers" Type="Int32" Nullable="false" />
+          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DriverID" Type="Int32" Nullable="false" />
+          <Property Name="RiderID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Driver" Relationship="Self.FK_Active_Driver" FromRole="ActiveRequest" ToRole="Driver" />
+          <NavigationProperty Name="Rider" Relationship="Self.FK_Active_Rider" FromRole="ActiveRequest" ToRole="Rider" />
+        </EntityType>
+        <EntityType Name="Driver">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="254" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="VenmoID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ActiveRequests" Relationship="Self.FK_Active_Driver" FromRole="Driver" ToRole="ActiveRequest" />
+          <NavigationProperty Name="HistoricalRequests" Relationship="Self.FK_Historical_Driver" FromRole="Driver" ToRole="HistoricalRequest" />
+          <NavigationProperty Name="RiderReviews" Relationship="Self.FK_Reveiw_Driver" FromRole="Driver" ToRole="RiderReview" />
+        </EntityType>
+        <EntityType Name="HistoricalRequest">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="StartTime" Type="DateTime" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Precision="3" />
+          <Property Name="StartLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EndLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NumPassangers" Type="Int32" Nullable="false" />
+          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DriverID" Type="Int32" Nullable="false" />
+          <Property Name="RiderID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Driver" Relationship="Self.FK_Historical_Driver" FromRole="HistoricalRequest" ToRole="Driver" />
+          <NavigationProperty Name="Rider" Relationship="Self.FK_Historical_Rider" FromRole="HistoricalRequest" ToRole="Rider" />
+        </EntityType>
+        <EntityType Name="Rider">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="254" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ActiveRequests" Relationship="Self.FK_Active_Rider" FromRole="Rider" ToRole="ActiveRequest" />
+          <NavigationProperty Name="HistoricalRequests" Relationship="Self.FK_Historical_Rider" FromRole="Rider" ToRole="HistoricalRequest" />
+          <NavigationProperty Name="RiderReviews" Relationship="Self.FK_Reveiw_Rider" FromRole="Rider" ToRole="RiderReview" />
+        </EntityType>
+        <EntityType Name="RiderReview">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Rateing" Type="Int32" />
+          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DriverID" Type="Int32" Nullable="false" />
+          <Property Name="RiderID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Driver" Relationship="Self.FK_Reveiw_Driver" FromRole="RiderReview" ToRole="Driver" />
+          <NavigationProperty Name="Rider" Relationship="Self.FK_Reveiw_Rider" FromRole="RiderReview" ToRole="Rider" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="todoitem">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="version" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="createdAt" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="updatedAt" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="deleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Active_Driver">
+          <End Role="Driver" Type="Self.Driver" Multiplicity="1" />
+          <End Role="ActiveRequest" Type="Self.ActiveRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Driver">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ActiveRequest">
+              <PropertyRef Name="DriverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Active_Rider">
+          <End Role="Rider" Type="Self.Rider" Multiplicity="1" />
+          <End Role="ActiveRequest" Type="Self.ActiveRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rider">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ActiveRequest">
+              <PropertyRef Name="RiderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Historical_Driver">
+          <End Role="Driver" Type="Self.Driver" Multiplicity="1" />
+          <End Role="HistoricalRequest" Type="Self.HistoricalRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Driver">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HistoricalRequest">
+              <PropertyRef Name="DriverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reveiw_Driver">
+          <End Role="Driver" Type="Self.Driver" Multiplicity="1" />
+          <End Role="RiderReview" Type="Self.RiderReview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Driver">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RiderReview">
+              <PropertyRef Name="DriverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Historical_Rider">
+          <End Role="Rider" Type="Self.Rider" Multiplicity="1" />
+          <End Role="HistoricalRequest" Type="Self.HistoricalRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rider">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HistoricalRequest">
+              <PropertyRef Name="RiderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reveiw_Rider">
+          <End Role="Rider" Type="Self.Rider" Multiplicity="1" />
+          <End Role="RiderReview" Type="Self.RiderReview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rider">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RiderReview">
+              <PropertyRef Name="RiderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HopperEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ActiveRequests" EntityType="Self.ActiveRequest" />
+          <EntitySet Name="Drivers" EntityType="Self.Driver" />
+          <EntitySet Name="HistoricalRequests" EntityType="Self.HistoricalRequest" />
+          <EntitySet Name="Riders" EntityType="Self.Rider" />
+          <EntitySet Name="RiderReviews" EntityType="Self.RiderReview" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="todoitems" EntityType="Self.todoitem" />
+          <AssociationSet Name="FK_Active_Driver" Association="Self.FK_Active_Driver">
+            <End Role="Driver" EntitySet="Drivers" />
+            <End Role="ActiveRequest" EntitySet="ActiveRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Active_Rider" Association="Self.FK_Active_Rider">
+            <End Role="Rider" EntitySet="Riders" />
+            <End Role="ActiveRequest" EntitySet="ActiveRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Historical_Driver" Association="Self.FK_Historical_Driver">
+            <End Role="Driver" EntitySet="Drivers" />
+            <End Role="HistoricalRequest" EntitySet="HistoricalRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reveiw_Driver" Association="Self.FK_Reveiw_Driver">
+            <End Role="Driver" EntitySet="Drivers" />
+            <End Role="RiderReview" EntitySet="RiderReviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Historical_Rider" Association="Self.FK_Historical_Rider">
+            <End Role="Rider" EntitySet="Riders" />
+            <End Role="HistoricalRequest" EntitySet="HistoricalRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reveiw_Rider" Association="Self.FK_Reveiw_Rider">
+            <End Role="Rider" EntitySet="Riders" />
+            <End Role="RiderReview" EntitySet="RiderReviews" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HopperModelStoreContainer" CdmEntityContainer="HopperEntities">
+          <EntitySetMapping Name="ActiveRequests">
+            <EntityTypeMapping TypeName="HopperModel.ActiveRequest">
+              <MappingFragment StoreEntitySet="ActiveRequest">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartLocation" ColumnName="StartLocation" />
+                <ScalarProperty Name="EndLocation" ColumnName="EndLocation" />
+                <ScalarProperty Name="NumPassangers" ColumnName="NumPassangers" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="DriverID" ColumnName="DriverID" />
+                <ScalarProperty Name="RiderID" ColumnName="RiderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Drivers">
+            <EntityTypeMapping TypeName="HopperModel.Driver">
+              <MappingFragment StoreEntitySet="Driver">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="VenmoID" ColumnName="VenmoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HistoricalRequests">
+            <EntityTypeMapping TypeName="HopperModel.HistoricalRequest">
+              <MappingFragment StoreEntitySet="HistoricalRequest">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartLocation" ColumnName="StartLocation" />
+                <ScalarProperty Name="EndLocation" ColumnName="EndLocation" />
+                <ScalarProperty Name="NumPassangers" ColumnName="NumPassangers" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="DriverID" ColumnName="DriverID" />
+                <ScalarProperty Name="RiderID" ColumnName="RiderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Riders">
+            <EntityTypeMapping TypeName="HopperModel.Rider">
+              <MappingFragment StoreEntitySet="Rider">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RiderReviews">
+            <EntityTypeMapping TypeName="HopperModel.RiderReview">
+              <MappingFragment StoreEntitySet="RiderReview">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Rateing" ColumnName="Rateing" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="DriverID" ColumnName="DriverID" />
+                <ScalarProperty Name="RiderID" ColumnName="RiderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="HopperModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="todoitems">
+            <EntityTypeMapping TypeName="HopperModel.todoitem">
+              <MappingFragment StoreEntitySet="todoitem">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="createdAt" ColumnName="createdAt" />
+                <ScalarProperty Name="updatedAt" ColumnName="updatedAt" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
