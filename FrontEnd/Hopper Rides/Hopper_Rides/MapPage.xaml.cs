@@ -16,15 +16,17 @@ namespace Hopper_Rides
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MapPage : ContentPage
     {
+        Map map;
+        string googleKey = "AIzaSyA3aaKi6HVMDLcvez0EGcMn6Fsngl5lC5g";
+
         public MapPage()
         {
             //Seems to work without this
             //InitializeComponent();
-
-            string googleKey = "AIzaSyA3aaKi6HVMDLcvez0EGcMn6Fsngl5lC5g";
+            
 
             //Initialize Map with location, zoom, and size of the map
-            var map = new Map(
+            map = new Map(
             MapSpan.FromCenterAndRadius(
                     new Position(43.068152, -89.409759), Distance.FromMiles(1)))
             {
@@ -40,7 +42,7 @@ namespace Hopper_Rides
                 Label = "You are here!"
             };
 
-            var dest = new Entry
+            var dest = new SearchBar
             {
                 Placeholder = "Where are you going?",
                 //VerticalTextAlignment = TextAlignment.Center,
@@ -50,46 +52,8 @@ namespace Hopper_Rides
 
             map.Pins.Add(pin);
 
-            //Event handler when Enter pressed from search bar
-            dest.Completed += async (sender, e) =>
-            {
-                var text = ((Entry)sender).Text;
-
-                //Send location request to Google and get JSON response
-                string url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + ((string)text) + "&key=" + googleKey;
-                var jsonResponse = await SendRequest(url);
-
-                if(!jsonResponse.IsSuccessStatusCode)
-                {
-                    System.Diagnostics.Debug.WriteLine("Bad Address?");
-                }
-                else
-                {
-                    string content = await jsonResponse.Content.ReadAsStringAsync();
-                    
-                    System.Diagnostics.Debug.WriteLine(content);
-
-                    //Parse JSON data to extract necessary coordinates
-                    JsonResponse parsedResponse = JsonConvert.DeserializeObject<JsonResponse>(content);
-                    double latitude = parsedResponse.Results[0].Geo.Loc.Latitude;
-                    double longitude = parsedResponse.Results[0].Geo.Loc.Longitude;
-
-                    //Place new pin
-                    var newPin = new Pin
-                    {
-                        Position = new Position(latitude, longitude),
-                        Label = "Destination"
-                    };
-
-                    map.Pins.Add(newPin);
-
-                    //Find new center of pins and largest radius for new map position
-                    Position newCenter = PinFunctions.CenterPosition(map);
-                    map.MoveToRegion(MapSpan.FromCenterAndRadius(newCenter, PinFunctions.LargestRadius(map, newCenter)));
-                }
-
-                dest.Text = "";
-            };
+            //When search bar is clicked
+            dest.Focused += searchFocus;
 
             //Not yet sure what this part does...
             var stack = new StackLayout { Spacing = 0 };
@@ -97,6 +61,52 @@ namespace Hopper_Rides
             stack.Children.Add(map);
             Content = stack;
 
+        }
+
+        async void searchFocus(Object sender, EventArgs e)
+        {
+            var searchPage = new SearchPage();
+
+            //Set the Selected event handler in the SearchPage to OnSelection
+            searchPage.Selected += OnSelection;
+            await Navigation.PushModalAsync(searchPage);
+        }
+
+        async void OnSelection(Object sender, EventArgs e)
+        {
+            //Extract description of selected autocomplete prediction
+            SelectedItemChangedEventArgs se = (SelectedItemChangedEventArgs)e;
+            string text = ((Prediction)(se.SelectedItem)).description;
+
+            //Pop the SearchPage off of the stack, returning to the map
+            await Navigation.PopModalAsync();
+
+            //Send location request to Google and get JSON response
+            string url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + text + "&key=" + googleKey;
+            var jsonResponse = await SendRequest(url);
+
+            if (!jsonResponse.IsSuccessStatusCode)
+            {
+                System.Diagnostics.Debug.WriteLine("Bad Address?");
+            }
+            else
+            {
+                string content = await jsonResponse.Content.ReadAsStringAsync();
+
+                System.Diagnostics.Debug.WriteLine(content);
+
+                //Parse JSON data to extract necessary coordinates
+                GeocodeResponse parsedResponse = JsonConvert.DeserializeObject<GeocodeResponse>(content);
+                double latitude = parsedResponse.Results[0].Geo.Loc.Latitude;
+                double longitude = parsedResponse.Results[0].Geo.Loc.Longitude;
+
+                //Change location of existing pin (since riders should only have one destination)
+                map.Pins[0].Position = new Position(latitude, longitude);
+
+                //Find new center of pins and largest radius for new map position
+                Position newCenter = PinFunctions.CenterPosition(map);
+                map.MoveToRegion(MapSpan.FromCenterAndRadius(newCenter, PinFunctions.LargestRadius(map, newCenter)));
+            }
         }
 
         //Sends HTTP request using given url

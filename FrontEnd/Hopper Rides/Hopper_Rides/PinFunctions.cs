@@ -31,15 +31,19 @@ namespace Hopper_Rides
         //Returns largest Distance needed to show all pins in map centered at center
         public static Distance LargestRadius(Map map, Position center)
         {
-            double maxRadius = 0;
+            //Default value if only one pin
+            double maxRadius = 0.25;
             double currRadius;
 
-            foreach (var pin in map.Pins)
+            if (map.Pins.Count > 1)
             {
-                currRadius = CoordDistance(pin.Position, center);
+                foreach (var pin in map.Pins)
+                {
+                    currRadius = CoordDistance(pin.Position, center);
 
-                if (currRadius > maxRadius)
-                    maxRadius = currRadius;
+                    if (currRadius > maxRadius)
+                        maxRadius = currRadius;
+                }
             }
 
             //1.1 to provide buffer around largest radius
