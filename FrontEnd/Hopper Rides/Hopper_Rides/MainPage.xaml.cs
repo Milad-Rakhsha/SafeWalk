@@ -1,4 +1,4 @@
-﻿using Org.Apache.Http.Client.Methods;
+﻿//using Org.Apache.Http.Client.Methods;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,7 +24,7 @@ namespace Hopper_Rides
          {
             if (!String.IsNullOrEmpty(UsernameEntry.Text) && UsernameEntry.Text.Equals("Driver", StringComparison.OrdinalIgnoreCase))
             {
-                await Navigation.PushModalAsync(new DriverMapPage());
+                await Navigation.PushModalAsync(new DriverListPage());
             }
             else
             {

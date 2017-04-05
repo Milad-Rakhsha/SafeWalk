@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Hopper_Rides.DriverListPage" IsPresented="True">
+
+    <MasterDetailPage.Master>
+        <ContentPage Title="List View">
+            <StackLayout>
+              
+                <Label Text="List View" FontSize="24"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start"/>
+                <Label Text="Shane" FontSize="24"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Start"/>
+                <Label Text="Milad" FontSize="24"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start"/>
+                <Label Text="Patrick" FontSize="24"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start"/>
+                <Label Text="Kyle" FontSize="24"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start"/>
+                <Label Text="Craig" FontSize="24"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start"/>
+                <Label Text="Tanner" FontSize="24"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start"/>
+              
+                <ListView>
+                  <!--Not showing up yet. Will work on it-->
+                  <!--Hardcoded values for now...-->
+                  <Button Text="Shane" FontSize="24"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start">
+                  </Button>
+                  
+                </ListView>
+            </StackLayout>
+        </ContentPage>
+    </MasterDetailPage.Master>
+
+</MasterDetailPage>
