@@ -41,7 +41,7 @@
     <Compile Include="DriverMapPage.xaml.cs">
       <DependentUpon>DriverMapPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JsonResponse.cs" />
+    <Compile Include="GeocodeResponse.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -59,6 +59,9 @@
     </Compile>
     <Compile Include="PinFunctions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchPage.xaml.cs">
+      <DependentUpon>SearchPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainPage.xaml">
@@ -121,6 +124,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DriverListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SearchPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

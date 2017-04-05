@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Hopper_Rides
 {
     [DataContract]
-    class JsonResponse
+    class GeocodeResponse
     {
         [DataMember(Name = "status")]
         public string Status { get; set; }
