@@ -41,7 +41,7 @@
            HorizontalOptions="CenterAndExpand"    
            TextColor="Black"  
            BackgroundColor="Silver"     
-           Clicked="sendRequest" 		
+           Clicked="SendRequest" 		
                 />
 
     </StackLayout>
