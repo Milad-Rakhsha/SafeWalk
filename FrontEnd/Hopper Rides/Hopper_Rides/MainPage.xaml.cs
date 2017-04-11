@@ -37,7 +37,7 @@ namespace Hopper_Rides
 
 
 
-		public static async Task<string> SendRequest()
+		async void sendRequest(Object sender, EventArgs e)
 		{
 			using (var client = new HttpClient())
 			{
@@ -71,15 +71,9 @@ namespace Hopper_Rides
 				var responseString_post = await response_post.Content.ReadAsStringAsync();
 				Debug.WriteLine(responseString_post);
 
-				return responseString;
 			}		
 
 			
-		}
-
-		async void SendRequest(Object sender, EventArgs e)
-		{
-			await MainPage.SendRequest();
 		}
 	}
 }
