@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
-
 using Newtonsoft.Json;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Xamarin.Forms.GoogleMaps;
+using Plugin.Geolocator;
 
 namespace Hopper_Rides
 {
@@ -18,48 +18,26 @@ namespace Hopper_Rides
     {
         Map map;
         string googleKey = "AIzaSyA3aaKi6HVMDLcvez0EGcMn6Fsngl5lC5g";
+		double currentLong;
+		double currentLat;
+		Position currentPosition;
+		
+		
 
-        public MapPage()
+		public MapPage()
         {
-            //Seems to work without this
-            //InitializeComponent();
-            
+			//Seems to work without this
+			//InitializeComponent();
 
-            //Initialize Map with location, zoom, and size of the map
-            map = new Map(
-            MapSpan.FromCenterAndRadius(
-                    new Position(43.068152, -89.409759), Distance.FromMiles(1)))
-            {
-                IsShowingUser = true,
-                HeightRequest = 100,
-                WidthRequest = 960,
-                VerticalOptions = LayoutOptions.FillAndExpand
-            };
 
-            var pin = new Pin()
-            {
-                Position = new Position(43.068152, -89.409759),
-                Label = "You are here!"
-            };
+			//Initialize Map with location, zoom, and size of the map
+			getUserLocation();
+			
 
-            var dest = new SearchBar
-            {
-                Placeholder = "Where are you going?",
-                //VerticalTextAlignment = TextAlignment.Center,
-                HorizontalTextAlignment = TextAlignment.Center,
+			Debug.WriteLine("Position Latitude: {0}", currentLat);
+			Debug.WriteLine("Position Longitude: {0}", currentLong);	
 
-            };
-
-            map.Pins.Add(pin);
-
-            //When search bar is clicked
-            dest.Focused += searchFocus;
-
-            //Not yet sure what this part does...
-            var stack = new StackLayout { Spacing = 0 };
-            stack.Children.Add(dest);
-            stack.Children.Add(map);
-            Content = stack;
+       
 
         }
 
@@ -72,7 +50,89 @@ namespace Hopper_Rides
             await Navigation.PushModalAsync(searchPage);
         }
 
-        async void OnSelection(Object sender, EventArgs e)
+
+		void onClicked(object sender, EventArgs e)
+		{
+			Pin destination = new Pin();		
+
+			destination.Position = new Position(43.068152, -89.409759);
+			destination.Label = "Hold to Drag";
+			destination.IsDraggable = true;
+			map.Pins.Add(destination);
+
+                
+		}
+
+		async void getUserLocation()
+		{
+			try
+			{
+				var locator = CrossGeolocator.Current;
+				locator.DesiredAccuracy = 50;
+
+				var position = await locator.GetPositionAsync();
+				if (position == null)
+					return;
+				currentLat = position.Latitude;
+				currentLong = position.Longitude;
+				currentPosition = new Position(currentLat,currentLong);
+
+
+
+				Debug.WriteLine("Position Latitude: {0}", position.Latitude);
+				Debug.WriteLine("Position Longitude: {0}", position.Longitude);
+				Debug.WriteLine("Position Latitude: {0}", currentLat);
+				Debug.WriteLine("Position Longitude: {0}", currentLong);
+
+				map = new Map(
+					MapSpan.FromCenterAndRadius(currentPosition, Distance.FromMiles(1)))
+				{
+					IsShowingUser = true,
+					HeightRequest = 100,
+					WidthRequest = 960,
+					VerticalOptions = LayoutOptions.FillAndExpand
+				};
+
+				var pin = new Pin()
+				{
+
+					Position = currentPosition,
+					Label = "You are here!"
+				};
+				map.Pins.Add(pin);
+
+				var dest = new SearchBar
+				{
+					Placeholder = "Where are you going?",
+					//VerticalTextAlignment = TextAlignment.Center,
+					HorizontalTextAlignment = TextAlignment.Center,
+
+				};
+				Button dropPin = new Button
+				{
+					Text = "Drop Destination Pin",
+					Font = Font.SystemFontOfSize(NamedSize.Large)
+				};
+				dropPin.Clicked += onClicked;
+
+
+				//When search bar is clicked
+				dest.Focused += searchFocus;
+
+				//Not yet sure what this part does...
+				var stack = new StackLayout { Spacing = 0 };
+				stack.Children.Add(dest);
+				stack.Children.Add(map);
+				stack.Children.Add(dropPin);
+				Content = stack;
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine("Unable to get location, may need to increase timeout: " + ex);
+			}
+		}
+
+		async void OnSelection(Object sender, EventArgs e)
         {
             //Extract description of selected autocomplete prediction
             SelectedItemChangedEventArgs se = (SelectedItemChangedEventArgs)e;
