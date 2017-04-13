@@ -16,6 +16,12 @@
                    Placeholder="Where are you going?"
                    TextChanged="OnTextChanged"
                    />
+        <Button x:Name="useLocation"
+                VerticalOptions="Start"
+                HorizontalOptions="CenterAndExpand"
+                Text="Use Your Location"
+                Clicked="OnButtonClick"
+                />
         <ListView x:Name="list" 
                   VerticalOptions="StartAndExpand"
                   HorizontalOptions="StartAndExpand"

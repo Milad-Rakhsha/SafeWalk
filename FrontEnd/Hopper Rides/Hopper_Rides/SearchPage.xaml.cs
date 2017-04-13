@@ -16,6 +16,7 @@ namespace Hopper_Rides
     public partial class SearchPage : ContentPage
     {
         public event EventHandler Selected;
+        public event EventHandler ButtonClicked;
 
         public SearchPage(bool isDestination)
         {
@@ -64,10 +65,6 @@ namespace Hopper_Rides
             }
 
             searchBar.Focus();
-            var stack = new StackLayout { Spacing = 0 };
-            stack.Children.Add(searchBar);
-            stack.Children.Add(list);
-            Content = stack;
         }
 
         void OnSelection(Object sender, SelectedItemChangedEventArgs e)
@@ -79,6 +76,11 @@ namespace Hopper_Rides
 
             Selected(this, e);
 
+        }
+
+        void OnButtonClick(Object sender, EventArgs e)
+        {
+            ButtonClicked(this, e);
         }
 
         //Sends HTTP request using given url

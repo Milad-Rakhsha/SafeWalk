@@ -47,6 +47,7 @@ namespace Hopper_Rides
 
             //Set the Selected event handler in the SearchPage to OnSelection
             searchPage.Selected += OnStartSelection;
+            searchPage.ButtonClicked += OnStartLocation;
             await Navigation.PushModalAsync(searchPage);
         }
 
@@ -56,6 +57,7 @@ namespace Hopper_Rides
 
             //Set the Selected event handler in the SearchPage to OnSelection
             searchPage.Selected += OnDestSelection;
+            searchPage.ButtonClicked += OnDestLocation;
             await Navigation.PushModalAsync(searchPage);
         }
 
@@ -126,6 +128,50 @@ namespace Hopper_Rides
                 double longitude = parsedResponse.Results[0].Geo.Loc.Longitude;
 
                 AddOrChangePin(latitude, longitude, true);
+            }
+        }
+
+        async void OnStartLocation(Object sender, EventArgs e)
+        {
+            try
+            {
+                var locator = CrossGeolocator.Current;
+
+                //Try to get current location with 10 second timeout
+                var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+
+                if (position == null)
+                    throw new Exception();
+
+                await Navigation.PopModalAsync();
+
+                AddOrChangePin(position.Latitude, position.Longitude, false);
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("Couldn't get current location.");
+            }
+        }
+
+        async void OnDestLocation(Object sender, EventArgs e)
+        {
+            try
+            {
+                var locator = CrossGeolocator.Current;
+
+                //Try to get current location with 10 second timeout
+                var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+
+                if (position == null)
+                    throw new Exception();
+
+                await Navigation.PopModalAsync();
+
+                AddOrChangePin(position.Latitude, position.Longitude, true);
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("Couldn't get current location.");
             }
         }
 
@@ -206,19 +252,10 @@ namespace Hopper_Rides
 					VerticalOptions = LayoutOptions.FillAndExpand
 				};
 
-				var pin = new Pin()
-				{
-
-					Position = currentPosition,
-					Label = "You are here!"
-				};
-				map.Pins.Add(pin);
-
                 start = new SearchBar
                 {
                     Placeholder = "Starting point...",
-                    HorizontalTextAlignment = TextAlignment.Start,
-                    
+                    HorizontalTextAlignment = TextAlignment.Start
                 };
 
                 start.Focused += startFocus;
@@ -226,10 +263,9 @@ namespace Hopper_Rides
                 dest = new SearchBar
 				{
 					Placeholder = "Where are you going?",
-					//VerticalTextAlignment = TextAlignment.Center,
-					HorizontalTextAlignment = TextAlignment.Start,
-
+					HorizontalTextAlignment = TextAlignment.Start
 				};
+
 				Button dropPin = new Button
 				{
 					Text = "Drop Destination Pin",
