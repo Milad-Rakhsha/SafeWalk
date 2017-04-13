@@ -249,20 +249,16 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <EntityDeploy Include="Models\Hopper.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Hopper.Designer.cs</LastGenOutput>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Models\Hopper.edmx.diagram">
       <DependentUpon>Hopper.edmx</DependentUpon>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Properties\PublishProfiles\TheHopper - Web Deploy.pubxml" />
   </ItemGroup>
   <PropertyGroup>

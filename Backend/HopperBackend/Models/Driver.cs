@@ -14,26 +14,11 @@ namespace HopperBackend.Models
     
     public partial class Driver
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Driver()
-        {
-            this.ActiveRequests = new HashSet<ActiveRequest>();
-            this.HistoricalRequests = new HashSet<HistoricalRequest>();
-            this.RiderReviews = new HashSet<RiderReview>();
-        }
-    
         public int ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string VenmoID { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ActiveRequest> ActiveRequests { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HistoricalRequest> HistoricalRequests { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RiderReview> RiderReviews { get; set; }
     }
 }
