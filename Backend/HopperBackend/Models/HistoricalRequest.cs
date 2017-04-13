@@ -23,8 +23,5 @@ namespace HopperBackend.Models
         public string Comment { get; set; }
         public int DriverID { get; set; }
         public int RiderID { get; set; }
-    
-        public virtual Driver Driver { get; set; }
-        public virtual Rider Rider { get; set; }
     }
 }

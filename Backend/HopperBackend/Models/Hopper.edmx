@@ -84,78 +84,6 @@
           <Property Name="updatedAt" Type="datetimeoffset" Precision="7" Nullable="false" />
           <Property Name="deleted" Type="bit" Nullable="false" />
         </EntityType>
-        <Association Name="FK_Active_Driver">
-          <End Role="Driver" Type="Self.Driver" Multiplicity="1" />
-          <End Role="ActiveRequest" Type="Self.ActiveRequest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Driver">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ActiveRequest">
-              <PropertyRef Name="DriverID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Active_Rider">
-          <End Role="Rider" Type="Self.Rider" Multiplicity="1" />
-          <End Role="ActiveRequest" Type="Self.ActiveRequest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Rider">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ActiveRequest">
-              <PropertyRef Name="RiderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Historical_Driver">
-          <End Role="Driver" Type="Self.Driver" Multiplicity="1" />
-          <End Role="HistoricalRequest" Type="Self.HistoricalRequest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Driver">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="HistoricalRequest">
-              <PropertyRef Name="DriverID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Historical_Rider">
-          <End Role="Rider" Type="Self.Rider" Multiplicity="1" />
-          <End Role="HistoricalRequest" Type="Self.HistoricalRequest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Rider">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="HistoricalRequest">
-              <PropertyRef Name="RiderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Reveiw_Driver">
-          <End Role="Driver" Type="Self.Driver" Multiplicity="1" />
-          <End Role="RiderReview" Type="Self.RiderReview" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Driver">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="RiderReview">
-              <PropertyRef Name="DriverID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Reveiw_Rider">
-          <End Role="Rider" Type="Self.Rider" Multiplicity="1" />
-          <End Role="RiderReview" Type="Self.RiderReview" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Rider">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="RiderReview">
-              <PropertyRef Name="RiderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="HopperModelStoreContainer">
           <EntitySet Name="ActiveRequest" EntityType="Self.ActiveRequest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Driver" EntityType="Self.Driver" Schema="dbo" store:Type="Tables" />
@@ -164,30 +92,6 @@
           <EntitySet Name="RiderReview" EntityType="Self.RiderReview" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="todoitem" EntityType="Self.todoitem" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Active_Driver" Association="Self.FK_Active_Driver">
-            <End Role="Driver" EntitySet="Driver" />
-            <End Role="ActiveRequest" EntitySet="ActiveRequest" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Active_Rider" Association="Self.FK_Active_Rider">
-            <End Role="Rider" EntitySet="Rider" />
-            <End Role="ActiveRequest" EntitySet="ActiveRequest" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Historical_Driver" Association="Self.FK_Historical_Driver">
-            <End Role="Driver" EntitySet="Driver" />
-            <End Role="HistoricalRequest" EntitySet="HistoricalRequest" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Historical_Rider" Association="Self.FK_Historical_Rider">
-            <End Role="Rider" EntitySet="Rider" />
-            <End Role="HistoricalRequest" EntitySet="HistoricalRequest" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Reveiw_Driver" Association="Self.FK_Reveiw_Driver">
-            <End Role="Driver" EntitySet="Driver" />
-            <End Role="RiderReview" EntitySet="RiderReview" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Reveiw_Rider" Association="Self.FK_Reveiw_Rider">
-            <End Role="Rider" EntitySet="Rider" />
-            <End Role="RiderReview" EntitySet="RiderReview" />
-          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
@@ -207,8 +111,6 @@
           <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="DriverID" Type="Int32" Nullable="false" />
           <Property Name="RiderID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Driver" Relationship="Self.FK_Active_Driver" FromRole="ActiveRequest" ToRole="Driver" />
-          <NavigationProperty Name="Rider" Relationship="Self.FK_Active_Rider" FromRole="ActiveRequest" ToRole="Rider" />
         </EntityType>
         <EntityType Name="Driver">
           <Key>
@@ -220,9 +122,6 @@
           <Property Name="Email" Type="String" MaxLength="254" FixedLength="false" Unicode="false" />
           <Property Name="PhoneNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="VenmoID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="ActiveRequests" Relationship="Self.FK_Active_Driver" FromRole="Driver" ToRole="ActiveRequest" />
-          <NavigationProperty Name="HistoricalRequests" Relationship="Self.FK_Historical_Driver" FromRole="Driver" ToRole="HistoricalRequest" />
-          <NavigationProperty Name="RiderReviews" Relationship="Self.FK_Reveiw_Driver" FromRole="Driver" ToRole="RiderReview" />
         </EntityType>
         <EntityType Name="HistoricalRequest">
           <Key>
@@ -237,8 +136,6 @@
           <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="DriverID" Type="Int32" Nullable="false" />
           <Property Name="RiderID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Driver" Relationship="Self.FK_Historical_Driver" FromRole="HistoricalRequest" ToRole="Driver" />
-          <NavigationProperty Name="Rider" Relationship="Self.FK_Historical_Rider" FromRole="HistoricalRequest" ToRole="Rider" />
         </EntityType>
         <EntityType Name="Rider">
           <Key>
@@ -249,9 +146,6 @@
           <Property Name="LastName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" MaxLength="254" FixedLength="false" Unicode="false" />
           <Property Name="PhoneNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="ActiveRequests" Relationship="Self.FK_Active_Rider" FromRole="Rider" ToRole="ActiveRequest" />
-          <NavigationProperty Name="HistoricalRequests" Relationship="Self.FK_Historical_Rider" FromRole="Rider" ToRole="HistoricalRequest" />
-          <NavigationProperty Name="RiderReviews" Relationship="Self.FK_Reveiw_Rider" FromRole="Rider" ToRole="RiderReview" />
         </EntityType>
         <EntityType Name="RiderReview">
           <Key>
@@ -262,8 +156,6 @@
           <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="DriverID" Type="Int32" Nullable="false" />
           <Property Name="RiderID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Driver" Relationship="Self.FK_Reveiw_Driver" FromRole="RiderReview" ToRole="Driver" />
-          <NavigationProperty Name="Rider" Relationship="Self.FK_Reveiw_Rider" FromRole="RiderReview" ToRole="Rider" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -285,78 +177,6 @@
           <Property Name="updatedAt" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="deleted" Type="Boolean" Nullable="false" />
         </EntityType>
-        <Association Name="FK_Active_Driver">
-          <End Role="Driver" Type="Self.Driver" Multiplicity="1" />
-          <End Role="ActiveRequest" Type="Self.ActiveRequest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Driver">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ActiveRequest">
-              <PropertyRef Name="DriverID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Active_Rider">
-          <End Role="Rider" Type="Self.Rider" Multiplicity="1" />
-          <End Role="ActiveRequest" Type="Self.ActiveRequest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Rider">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ActiveRequest">
-              <PropertyRef Name="RiderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Historical_Driver">
-          <End Role="Driver" Type="Self.Driver" Multiplicity="1" />
-          <End Role="HistoricalRequest" Type="Self.HistoricalRequest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Driver">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="HistoricalRequest">
-              <PropertyRef Name="DriverID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Reveiw_Driver">
-          <End Role="Driver" Type="Self.Driver" Multiplicity="1" />
-          <End Role="RiderReview" Type="Self.RiderReview" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Driver">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="RiderReview">
-              <PropertyRef Name="DriverID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Historical_Rider">
-          <End Role="Rider" Type="Self.Rider" Multiplicity="1" />
-          <End Role="HistoricalRequest" Type="Self.HistoricalRequest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Rider">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="HistoricalRequest">
-              <PropertyRef Name="RiderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Reveiw_Rider">
-          <End Role="Rider" Type="Self.Rider" Multiplicity="1" />
-          <End Role="RiderReview" Type="Self.RiderReview" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Rider">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="RiderReview">
-              <PropertyRef Name="RiderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="HopperEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ActiveRequests" EntityType="Self.ActiveRequest" />
           <EntitySet Name="Drivers" EntityType="Self.Driver" />
@@ -365,30 +185,6 @@
           <EntitySet Name="RiderReviews" EntityType="Self.RiderReview" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <EntitySet Name="todoitems" EntityType="Self.todoitem" />
-          <AssociationSet Name="FK_Active_Driver" Association="Self.FK_Active_Driver">
-            <End Role="Driver" EntitySet="Drivers" />
-            <End Role="ActiveRequest" EntitySet="ActiveRequests" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Active_Rider" Association="Self.FK_Active_Rider">
-            <End Role="Rider" EntitySet="Riders" />
-            <End Role="ActiveRequest" EntitySet="ActiveRequests" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Historical_Driver" Association="Self.FK_Historical_Driver">
-            <End Role="Driver" EntitySet="Drivers" />
-            <End Role="HistoricalRequest" EntitySet="HistoricalRequests" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Reveiw_Driver" Association="Self.FK_Reveiw_Driver">
-            <End Role="Driver" EntitySet="Drivers" />
-            <End Role="RiderReview" EntitySet="RiderReviews" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Historical_Rider" Association="Self.FK_Historical_Rider">
-            <End Role="Rider" EntitySet="Riders" />
-            <End Role="HistoricalRequest" EntitySet="HistoricalRequests" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Reveiw_Rider" Association="Self.FK_Reveiw_Rider">
-            <End Role="Rider" EntitySet="Riders" />
-            <End Role="RiderReview" EntitySet="RiderReviews" />
-          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -497,7 +293,7 @@
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="true" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="false" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
