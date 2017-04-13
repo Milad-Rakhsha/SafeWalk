@@ -17,9 +17,11 @@ namespace Hopper_Rides
     {
         public event EventHandler Selected;
 
-        public SearchPage()
+        public SearchPage(bool isDestination)
         {
             InitializeComponent();
+            if (!isDestination)
+                searchBar.Placeholder = "Starting Point...";
         }
 
         protected void OnAppearing(Object sender, EventArgs e)
