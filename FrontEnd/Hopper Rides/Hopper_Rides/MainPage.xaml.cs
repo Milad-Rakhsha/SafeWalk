@@ -18,30 +18,34 @@ namespace Hopper_Rides
 		public MainPage()
 		{
 			InitializeComponent();
-            Title = "Welcome to Hopper Rides!";
+			Title = "Welcome to Hopper Rides!";
 		}
 
-        async void onLogin(Object sender, EventArgs e)
-         {
-            if (!String.IsNullOrEmpty(UsernameEntry.Text) && UsernameEntry.Text.Equals("Driver", StringComparison.OrdinalIgnoreCase))
-            {
-                await Navigation.PushModalAsync(new DriverListPage());
-            }
-            else
-            {
-                //This is a rider
-                await Navigation.PushModalAsync(new MapPage());
-            }
-        }
+		async void onLogin(Object sender, EventArgs e)
+		{
+			if (!String.IsNullOrEmpty(UsernameEntry.Text) && UsernameEntry.Text.Equals("Driver", StringComparison.OrdinalIgnoreCase))
+			{
+			    await Navigation.PushModalAsync(new DriverListPage());
+			}
+			else
+			{
+			    //This is a rider
+			    await Navigation.PushModalAsync(new MapPage());
+			}
+		}
 
+		 void signin(Object sender, EventArgs e)
+		{
+			 Navigation.PushAsync(new MyPage());
 
+		}
 
 
 		async void sendRequest(Object sender, EventArgs e)
 		{
 			using (var client = new HttpClient())
 			{
-				
+
 				client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
 				//The following will receive the rider #2
 				var response = await client.GetAsync("http://thehopper.azurewebsites.net/api/riders/2");
@@ -58,11 +62,11 @@ namespace Hopper_Rides
 				//If you want to post some information:
 				// Make the object you want
 				Hopper_Rides.Models.Rider newRider = new Hopper_Rides.Models.Rider();
-				newRider.FirstName = "Kyle2";
-				newRider.FirstName = "Steiger";
+				newRider.FirstName = "Kyle3";
+				newRider.LastName = "Steiger3";
 				newRider.Email = "ksteiger@wisc.edu";
 				newRider.PhoneNumber = "608-333-6753";
-				newRider.ID = 6;
+				newRider.ID = 23;
 				//Serialize it
 				string ser_obj = JsonConvert.SerializeObject(newRider);
 				var content_post = new StringContent(ser_obj, Encoding.UTF8, "text/json");
@@ -71,9 +75,9 @@ namespace Hopper_Rides
 				var responseString_post = await response_post.Content.ReadAsStringAsync();
 				Debug.WriteLine(responseString_post);
 
-			}		
+			}
 
-			
+
 		}
 	}
 }

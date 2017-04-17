@@ -12,6 +12,7 @@ namespace Hopper_Rides
 		public App()
 		{
 			InitializeComponent();
+			//MainPage MAIN_PAGE = new Hopper_Rides.MainPage()
 
 			MainPage = new NavigationPage(new Hopper_Rides.MainPage());
 		}
