@@ -2,7 +2,7 @@ using Android.App;
 using Xamarin.Forms.Platform.Android;
 using Hopper_Rides;
 using Xamarin.Forms;
-using Hopper_Rides.Droid.PageRender;
+using Hopper_Rides.Droid;
 using Xamarin.Auth;
 using System;
 using Newtonsoft.Json.Linq;
@@ -14,7 +14,7 @@ using System.Net.Http;
 using System.Diagnostics;
 
 [assembly: ExportRenderer(typeof(ProviderPage), typeof(LoginRenderer))]
-namespace Hopper_Rides.Droid.PageRender
+namespace Hopper_Rides.Droid
 {
 	public class LoginRenderer : PageRenderer
 	{
@@ -62,7 +62,7 @@ namespace Hopper_Rides.Droid.PageRender
 				}
 
 				// After facebook,google and all identity provider login completed 
-				auth.Completed += (sender, eventArgs) =>
+				auth.Completed += async (sender, eventArgs) =>
 			  {
 				  if (eventArgs.IsAuthenticated)
 				  {
@@ -97,6 +97,7 @@ namespace Hopper_Rides.Droid.PageRender
 					  }
 					  //OAuthConfig.PostRider();
 					  //OAuthConfig.SuccessfulLoginAction.Invoke();
+					  await ((ProviderPage)Element).SuccessfulLogin(new MapPage());
 
 				  }
 				  else
