@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,7 +24,7 @@ namespace Hopper_Rides
         {
             InitializeComponent();
             getRequests();
-            this.Detail = new DriverMapPage(this.requests);
+            this.Detail = new DriverMapPage();
             this.FindByName<ListView>("list").ItemsSource = requests;
             
             //TODO Dynamically add in buttons for each riders
@@ -39,7 +42,7 @@ namespace Hopper_Rides
 
         void OnTapped(object sender, SelectedItemChangedEventArgs e)
         {
-
+            //TODO
         }
 
         /**
@@ -48,44 +51,39 @@ namespace Hopper_Rides
          */ 
         public void quickReject()
         {
-
+            //TODO
         }
 
         /**
          * Get the requests from the server. Called when the list is initialized
          * and from a pull-to-refresh event.
          */
-        public void getRequests()
+        async void getRequests()
         {
-            Models.ActiveRequest req = new Models.ActiveRequest();
-            req.NumPassangers = 3;
-            req.StartLocation = "43.074276,-89.394445";
-            req.EndLocation = "43.074997,-89.394852";
-            req.StartTime = new DateTime(2017, 4, 16, 13, 30, 50);
-            req.RiderID = 4807;
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
+                    requests = new List<Models.ActiveRequest>();
+                    riders = new List<Models.Rider>();
 
-            Models.Rider rider = new Models.Rider();
-            rider.ID = 4807;
-            rider.FirstName = "Shane";
-            rider.LastName = "Jann";
+                    var reqResponse = await client.GetAsync("http://thehopper.azurewebsites.net/api/ActiveRequests/");
+                    //This will be an IQueryable object
+                    var reqResponseStr = await reqResponse.Content.ReadAsStringAsync();
+                    //The following will convert the json to an actual rider object
+                    requests = JsonConvert.DeserializeObject<List<Models.ActiveRequest>>(reqResponseStr);
 
-            requests.Add(req);
-            riders.Add(rider);
-
-            Models.ActiveRequest req1 = new Models.ActiveRequest();
-            req1.NumPassangers = 3;
-            req1.StartLocation = "43.071713,-89.407837";
-            req1.EndLocation = "43.076144,-89399845";
-            req1.StartTime = new DateTime(2017, 4, 16, 12, 51, 47);
-            req1.RiderID = 4807;
-
-            Models.Rider rider1 = new Models.Rider();
-            rider1.ID = 7084;
-            rider1.FirstName = "Saun";
-            rider1.LastName = "Jon";
-
-            requests.Add(req1);
-            riders.Add(rider1);
+                    //Same process here
+                    var riderResponse = await client.GetAsync("http://thehopper.azurewebsites.net/api/riders/");
+                    var riderResponseStr = await riderResponse.Content.ReadAsStringAsync();
+                    riders = JsonConvert.DeserializeObject<List<Models.Rider>>(riderResponseStr);
+                }
+                catch (ArgumentNullException e)
+                {
+                    await DisplayAlert("GET Request Failed", "Could not get requests (NullArg)", "OK");
+                }
+            }
         }
     }
 }
