@@ -52,10 +52,27 @@ namespace Hopper_Rides
 
             try
             {
-                DisplayAlert("Debug", requests.Count().ToString(), "OK");
+               // DisplayAlert("Debug", requests.Count().ToString(), "OK");
 
-                getRiderData();
-                getRequestData();
+                //getRiderData();
+                Task<List<Models.ActiveRequest>> newReqTask = getRequestData();
+                Debug.WriteLine("After getRequestDatae()");
+                
+                //newReqTask.Wait();
+                List<Models.ActiveRequest> requests = newReqTask.Result;
+                Debug.WriteLine("After result returned");
+                this.requests = requests;
+                Debug.WriteLine("Result set");
+
+
+                Task<List<Models.Rider>> newRidTask = getRiderData();
+
+                //newRidTask.Wait();
+                List<Models.Rider> riders = newRidTask.Result;
+                this.riders = riders;
+
+                //riders.Add(new Models.Rider());
+
                 //getPinData();
                 //for every request,
                 double[] xC = new double[requests.Count()];
@@ -67,7 +84,7 @@ namespace Hopper_Rides
                 for (int i = 0; i < requests.Count(); i++)
                 {
                     //find the rider corresponding to that request
-                    for (int j = 0; i < riders.Count; j++)
+                    for (int j = 0; j < riders.Count; j++)
                     {
                         Debug.WriteLine("Does " + riders.ElementAt(j).ID + " == " + requests.ElementAt(i).RiderID + "?");
                         if (riders.ElementAt(j).ID == requests.ElementAt(i).RiderID)
@@ -114,43 +131,53 @@ namespace Hopper_Rides
 		}
 
 
-        async void getRequestData()
+        async Task<List<Models.ActiveRequest>> getRequestData()
         {
+           
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
-                requests = new List<Models.ActiveRequest>();
-
-                var reqResponse = await client.GetAsync("http://thehopper.azurewebsites.net/api/ActiveRequests/");
+                List<Models.ActiveRequest> req = new List<Models.ActiveRequest>();
+                Debug.WriteLine("Before the request to server");
+                var reqResponse = await client.GetStringAsync("http://thehopper.azurewebsites.net/api/ActiveRequests/").ConfigureAwait(false);
                 //This will be an IQueryable object
-                var reqResponseStr = await reqResponse.Content.ReadAsStringAsync();
+                Debug.WriteLine("Before the response from server");
+                string reqResponseStr =  reqResponse;
+                Debug.WriteLine("After the response from server");
+
                 //The following will convert the json to an actual rider object
-                requests = JsonConvert.DeserializeObject<List<Models.ActiveRequest>>(reqResponseStr);
+                req = JsonConvert.DeserializeObject<List<Models.ActiveRequest>>(reqResponseStr);
 
                 //DEBUG Stuff
-                for (int i = 0; i < requests.Count; i++)
+                for (int i = 0; i < req.Count; i++)
                 {
-                    Debug.WriteLine("Request " + i + ": " + requests.ElementAt(i).ID);
+                    Debug.WriteLine("Request " + i + ": " + req.ElementAt(i).ID);
                 }
+                return req;
             }
         }
 
-        async void getRiderData()
+        async Task<List<Models.Rider>> getRiderData()
         {
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
+
+                List<Models.Rider> rid = new List<Models.Rider>();
+
                 //Same process here
-                var riderResponse = await client.GetAsync("http://thehopper.azurewebsites.net/api/riders/");
-                var riderResponseStr = await riderResponse.Content.ReadAsStringAsync();
-                riders = JsonConvert.DeserializeObject<List<Models.Rider>>(riderResponseStr);
+                var riderResponse = await client.GetStringAsync("http://thehopper.azurewebsites.net/api/riders/").ConfigureAwait(false);
+                var riderResponseStr = riderResponse;
+                rid = JsonConvert.DeserializeObject<List<Models.Rider>>(riderResponseStr);
 
                 //DEBUG Stuff
-                for (int i = 0; i < riders.Count; i++)
+                for (int i = 0; i < rid.Count; i++)
                 {
-                    Debug.WriteLine("Rider " + i + ": " + riders.ElementAt(i).ID);
+                    Debug.WriteLine("Rider " + i + ": " + rid.ElementAt(i).ID);
                 }
+                return rid;
             }
+            
         }
 
         /*
