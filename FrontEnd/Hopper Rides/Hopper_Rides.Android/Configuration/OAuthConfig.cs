@@ -30,18 +30,5 @@ namespace Hopper_Rides
 				Debug.WriteLine("Posting a new User to the database");
 			}
 		}
-
-
-		public static Action SuccessfulLoginAction
-		{
-			get
-			{
-				return new Action(() =>
-				{
-					_NavigationPage.Navigation.PopAsync();
-				});
-			}
-		}
-
 	}
 }

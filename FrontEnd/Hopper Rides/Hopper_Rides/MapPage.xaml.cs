@@ -210,7 +210,7 @@ namespace Hopper_Rides
             map.MoveToRegion(MapSpan.FromCenterAndRadius(newCenter, PinFunctions.LargestRadius(map, newCenter)));
         }
 
-        void onClicked(object sender, EventArgs e)
+        void onDropClicked(object sender, EventArgs e)
 		{
 			Pin destination = new Pin();		
 
@@ -221,6 +221,11 @@ namespace Hopper_Rides
 
                 
 		}
+
+        void onSubmitClicked(Object sender, EventArgs e)
+        {
+            //Add code to submit ride request to database
+        }
 
 		async void getUserLocation()
 		{
@@ -247,9 +252,8 @@ namespace Hopper_Rides
 					MapSpan.FromCenterAndRadius(currentPosition, Distance.FromMiles(1)))
 				{
 					IsShowingUser = true,
-					HeightRequest = 100,
-					WidthRequest = 960,
-					VerticalOptions = LayoutOptions.FillAndExpand
+					VerticalOptions = LayoutOptions.FillAndExpand,
+                    HorizontalOptions = LayoutOptions.FillAndExpand
 				};
 
                 start = new SearchBar
@@ -269,22 +273,47 @@ namespace Hopper_Rides
 				Button dropPin = new Button
 				{
 					Text = "Drop Destination Pin",
-					Font = Font.SystemFontOfSize(NamedSize.Large)
+					Font = Font.SystemFontOfSize(NamedSize.Small)
 				};
-				dropPin.Clicked += onClicked;
+				dropPin.Clicked += onDropClicked;
+
+                Button submit = new Button
+                {
+                    Text = "Submit Request",
+                    BackgroundColor = Color.Red
+                };
+                submit.Clicked += onSubmitClicked;
 
 
 				//When search bar is clicked
 				dest.Focused += destFocus;
 
-				//Not yet sure what this part does...
-				var stack = new StackLayout { Spacing = 0 };
-                stack.Children.Add(start);
-				stack.Children.Add(dest);
-				stack.Children.Add(map);
-				stack.Children.Add(dropPin);
-				Content = stack;
-			}
+                var layout = new Grid
+                {
+                    VerticalOptions = LayoutOptions.FillAndExpand,
+                    RowDefinitions =
+                    {
+                        new RowDefinition { Height = GridLength.Auto },
+                        new RowDefinition { Height = GridLength.Auto },
+                        new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+                        new RowDefinition { Height = GridLength.Auto }
+                    },
+
+                    ColumnDefinitions =
+                    {
+                        new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                        new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
+                    }
+                };
+
+                layout.Children.Add(start, 0, 2, 0, 1);
+                layout.Children.Add(dest, 0, 2, 1, 2);
+                layout.Children.Add(map, 0, 2, 2, 3);
+                layout.Children.Add(dropPin, 0, 3);
+                layout.Children.Add(submit, 1, 3);
+                Content = layout;
+
+            }
 			catch (Exception ex)
 			{
 				Debug.WriteLine("Unable to get location, may need to increase timeout: " + ex);
