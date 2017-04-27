@@ -176,6 +176,7 @@
     <Compile Include="Controllers\ActiveRequestsController.cs" />
     <Compile Include="Controllers\DriversController.cs" />
     <Compile Include="Controllers\HistoricalRequestsController.cs" />
+    <Compile Include="Controllers\OpenController.cs" />
     <Compile Include="Controllers\RiderReviewsController.cs" />
     <Compile Include="Controllers\RidersController.cs" />
     <Compile Include="Controllers\TodoItemController.cs" />

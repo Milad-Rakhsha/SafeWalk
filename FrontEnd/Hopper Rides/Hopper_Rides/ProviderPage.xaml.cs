@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System.Threading.Tasks;
+using Xamarin.Forms;
 namespace Hopper_Rides
 {
 	public partial class ProviderPage : ContentPage
@@ -21,5 +22,10 @@ namespace Hopper_Rides
 			UserPhoneNumber = _UserPhoneNumber;
 
 		}
+
+        public async Task SuccessfulLogin(Page newPage)
+        {
+            await Navigation.PushModalAsync(newPage);
+        }
 	}
 }

@@ -2,7 +2,7 @@ using Android.App;
 using Xamarin.Forms.Platform.Android;
 using Hopper_Rides;
 using Xamarin.Forms;
-using Hopper_Rides.Droid.PageRender;
+using Hopper_Rides.Droid;
 using Xamarin.Auth;
 using System;
 using Newtonsoft.Json.Linq;
@@ -14,7 +14,7 @@ using System.Net.Http;
 using System.Diagnostics;
 
 [assembly: ExportRenderer(typeof(ProviderPage), typeof(LoginRenderer))]
-namespace Hopper_Rides.Droid.PageRender
+namespace Hopper_Rides.Droid
 {
 	public class LoginRenderer : PageRenderer
 	{
@@ -62,7 +62,7 @@ namespace Hopper_Rides.Droid.PageRender
 				}
 
 				// After facebook,google and all identity provider login completed 
-				auth.Completed += (sender, eventArgs) =>
+				auth.Completed += async (sender, eventArgs) =>
 			  {
 				  if (eventArgs.IsAuthenticated)
 				  {
@@ -90,13 +90,17 @@ namespace Hopper_Rides.Droid.PageRender
 
 					  using (var client = new HttpClient())
 					  {
-						  string ser_obj = JsonConvert.SerializeObject(OAuthConfig.User);
+                          client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
+                          string ser_obj = JsonConvert.SerializeObject(OAuthConfig.User);
 						  var content_post = new StringContent(ser_obj, Encoding.UTF8, "text/json");
 						  //post it to the proper table
-							var response_post = client.PostAsync("http://thehopper.azurewebsites.net/api/riders", content_post).Result;
-					  }
+							var response_post = await client.PostAsync("http://thehopper.azurewebsites.net/api/riders", content_post);
+                          var responseString_post = await response_post.Content.ReadAsStringAsync();
+                          System.Diagnostics.Debug.WriteLine(responseString_post);
+                      }
 					  //OAuthConfig.PostRider();
 					  //OAuthConfig.SuccessfulLoginAction.Invoke();
+					  await ((ProviderPage)Element).SuccessfulLogin(new MapPage());
 
 				  }
 				  else
