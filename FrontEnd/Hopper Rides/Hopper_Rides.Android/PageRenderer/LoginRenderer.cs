@@ -90,11 +90,14 @@ namespace Hopper_Rides.Droid
 
 					  using (var client = new HttpClient())
 					  {
-						  string ser_obj = JsonConvert.SerializeObject(OAuthConfig.User);
+                          client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
+                          string ser_obj = JsonConvert.SerializeObject(OAuthConfig.User);
 						  var content_post = new StringContent(ser_obj, Encoding.UTF8, "text/json");
 						  //post it to the proper table
-							var response_post = client.PostAsync("http://thehopper.azurewebsites.net/api/riders", content_post).Result;
-					  }
+							var response_post = await client.PostAsync("http://thehopper.azurewebsites.net/api/riders", content_post);
+                          var responseString_post = await response_post.Content.ReadAsStringAsync();
+                          System.Diagnostics.Debug.WriteLine(responseString_post);
+                      }
 					  //OAuthConfig.PostRider();
 					  //OAuthConfig.SuccessfulLoginAction.Invoke();
 					  await ((ProviderPage)Element).SuccessfulLogin(new MapPage());
