@@ -24,6 +24,9 @@ namespace Hopper_Rides
 			if (!isDestination)
 			{
 				searchBar.Placeholder = "Starting Point...";
+			}
+			else
+			{
 				useLocation.IsVisible = false;
 			}
         }
