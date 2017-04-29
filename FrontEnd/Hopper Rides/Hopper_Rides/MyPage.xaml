@@ -3,11 +3,12 @@
     <StackLayout>
 
 		<Entry x:Name="UserPhoneNumber"
-           Placeholder=" Phone number"
+           Placeholder="Phone number"
            VerticalOptions="Center"
            HorizontalOptions="CenterAndExpand" 
            BackgroundColor="Silver"
            TextColor="Black"    
+		   Keyboard="Telephone"
            HeightRequest="50"  
            WidthRequest="250"      
                />
