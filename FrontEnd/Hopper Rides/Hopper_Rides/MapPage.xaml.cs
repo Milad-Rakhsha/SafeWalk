@@ -67,7 +67,6 @@ namespace Hopper_Rides
 
             //Set the Selected event handler in the SearchPage to OnSelection
             searchPage.Selected += OnDestSelection;
-            searchPage.ButtonClicked += OnDestLocation;
             await Navigation.PushModalAsync(searchPage);
         }
 
@@ -155,29 +154,27 @@ namespace Hopper_Rides
 
                 await Navigation.PopModalAsync();
 
-                AddOrChangePin(position.Latitude, position.Longitude, false);
-            }
-            catch (Exception)
-            {
-                System.Diagnostics.Debug.WriteLine("Couldn't get current location.");
-            }
-        }
+                //Add address of location to search bar
+                string text = position.Latitude + "," + position.Longitude;
+                string url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + text + "&key=" + googleKey;
+                var jsonResponse = await SendRequest(url);
 
-        async void OnDestLocation(Object sender, EventArgs e)
-        {
-            try
-            {
-                var locator = CrossGeolocator.Current;
+                if (!jsonResponse.IsSuccessStatusCode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Bad Coordinates?");
+                }
+                else
+                {
+                    string content = await jsonResponse.Content.ReadAsStringAsync();
 
-                //Try to get current location with 10 second timeout
-                var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+                    System.Diagnostics.Debug.WriteLine(content);
 
-                if (position == null)
-                    throw new Exception();
+                    //Parse JSON data to extract address
+                    GeocodeResponse parsedResponse = JsonConvert.DeserializeObject<GeocodeResponse>(content);
+                    start.Text = parsedResponse.Results[0].Formatted_address;
 
-                await Navigation.PopModalAsync();
-
-                AddOrChangePin(position.Latitude, position.Longitude, true);
+                    AddOrChangePin(position.Latitude, position.Longitude, false);
+                }
             }
             catch (Exception)
             {

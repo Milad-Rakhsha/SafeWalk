@@ -17,11 +17,45 @@ namespace Hopper_Rides
     {
         public event EventHandler Selected;
         public event EventHandler ButtonClicked;
+        private SearchBar searchBar;
+        private Button useLocation;
+        private ListView list;
+        private ActivityIndicator loading;
 
         public SearchPage(bool isDestination)
         {
             InitializeComponent();
-			if (!isDestination)
+
+            searchBar = new SearchBar
+            {
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.StartAndExpand,
+                Placeholder = "Where are you going?"
+            };
+            searchBar.TextChanged += OnTextChanged;
+
+            useLocation = new Button
+            {
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                Text = "Use Your Location"
+            };
+            useLocation.Clicked += OnButtonClick;
+
+            list = new ListView
+            {
+                VerticalOptions = LayoutOptions.StartAndExpand,
+                HorizontalOptions = LayoutOptions.StartAndExpand
+            };
+            list.ItemSelected += OnSelection;
+
+            loading = new ActivityIndicator
+            {
+                IsRunning = true,
+                VerticalOptions = LayoutOptions.Start
+            };
+
+            if (!isDestination)
 			{
 				searchBar.Placeholder = "Starting Point...";
 			}
@@ -29,6 +63,10 @@ namespace Hopper_Rides
 			{
 				useLocation.IsVisible = false;
 			}
+
+            stack.Children.Add(searchBar);
+            stack.Children.Add(useLocation);
+            Content = stack;
         }
 
         protected void OnAppearing(Object sender, EventArgs e)
@@ -44,6 +82,10 @@ namespace Hopper_Rides
 
         async void OnTextChanged(Object sender, EventArgs e)
         {
+            //Add temporary loading indicator
+            stack.Children.Remove(list);
+            stack.Children.Add(loading);
+
             string googleKey = "AIzaSyA3aaKi6HVMDLcvez0EGcMn6Fsngl5lC5g";
             string dirUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=";
             dirUrl += searchBar.Text;
@@ -68,6 +110,10 @@ namespace Hopper_Rides
                 //Set up the list with the autocomplete predictions
                 list.ItemsSource = pParsed.predictions;
                 list.ItemTemplate = temp;
+
+                //Remove loading indicator and show list
+                stack.Children.Remove(loading);
+                stack.Children.Add(list);
             }
 
             searchBar.Focus();
@@ -86,6 +132,10 @@ namespace Hopper_Rides
 
         void OnButtonClick(Object sender, EventArgs e)
         {
+            //Add temporary loading indicator
+            stack.Children.Remove(list);
+            stack.Children.Add(loading);
+
             ButtonClicked(this, e);
         }
 
