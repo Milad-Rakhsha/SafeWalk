@@ -26,12 +26,22 @@ namespace Hopper_Rides
 
 		public MapPage()
         {
-			//Seems to work without this
-			//InitializeComponent();
+            //Seems to work without this
+            //InitializeComponent();
 
+            var stack = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.CenterAndExpand
+            };
+            stack.Children.Add(new ActivityIndicator
+            {
+                IsRunning = true,
+                VerticalOptions = LayoutOptions.Center
+            });
+            Content = stack;
 
-			//Initialize Map with location, zoom, and size of the map
-			getUserLocation();
+            //Initialize Map with location, zoom, and size of the map
+            getUserLocation();
 			
 
 			Debug.WriteLine("Position Latitude: {0}", currentLat);
@@ -183,15 +193,7 @@ namespace Hopper_Rides
             if (isDestination)
                 pinLabel = "Destination";
 
-            if (map.Pins.Count == 1 && map.Pins[0].Label.Equals(pinLabel))
-            {
-                map.Pins[0].Position = new Position(latitude, longitude);
-            }
-            else if (map.Pins.Count == 2 && map.Pins[1].Label.Equals(pinLabel))
-            {
-                map.Pins[1].Position = new Position(latitude, longitude);
-            }
-            else
+            if(map.Pins.Count == 0 || (map.Pins.Count == 1 && !map.Pins[0].Label.Equals(pinLabel)))
             {
                 Color color = Color.Red;
                 if (isDestination)
@@ -203,6 +205,14 @@ namespace Hopper_Rides
                     Label = pinLabel,
                     Icon = BitmapDescriptorFactory.DefaultMarker(color)
                 });
+            }
+            else if (map.Pins[0].Label.Equals(pinLabel))
+            {
+                map.Pins[0].Position = new Position(latitude, longitude);
+            }
+            else if (map.Pins.Count == 2 && map.Pins[1].Label.Equals(pinLabel))
+            {
+                map.Pins[1].Position = new Position(latitude, longitude);
             }
 
             //Find new center of pins and largest radius for new map position
@@ -231,6 +241,7 @@ namespace Hopper_Rides
 		{
 			try
 			{
+
 				var locator = CrossGeolocator.Current;
 				locator.DesiredAccuracy = 50;
 
