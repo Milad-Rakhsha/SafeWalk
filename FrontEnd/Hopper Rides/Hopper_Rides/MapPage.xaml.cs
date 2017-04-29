@@ -53,7 +53,7 @@ namespace Hopper_Rides
 
         async void startFocus(Object sender, EventArgs e)
         {
-            var searchPage = new SearchPage(false);
+            var searchPage = new SearchPage(false, start.Text);
 
             //Set the Selected event handler in the SearchPage to OnSelection
             searchPage.Selected += OnStartSelection;
@@ -63,7 +63,7 @@ namespace Hopper_Rides
 
         async void destFocus(Object sender, EventArgs e)
         {
-            var searchPage = new SearchPage(true);
+            var searchPage = new SearchPage(true, dest.Text);
 
             //Set the Selected event handler in the SearchPage to OnSelection
             searchPage.Selected += OnDestSelection;

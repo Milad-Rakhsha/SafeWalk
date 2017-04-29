@@ -22,7 +22,7 @@ namespace Hopper_Rides
         private ListView list;
         private ActivityIndicator loading;
 
-        public SearchPage(bool isDestination)
+        public SearchPage(bool isDestination, string oldText)
         {
             InitializeComponent();
 
@@ -30,7 +30,8 @@ namespace Hopper_Rides
             {
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
-                Placeholder = "Where are you going?"
+                Placeholder = "Where are you going?",
+                Text = oldText
             };
             searchBar.TextChanged += OnTextChanged;
 
