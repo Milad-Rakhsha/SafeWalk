@@ -42,7 +42,7 @@ namespace Hopper_Rides.Droid
 				{
 					auth = new OAuth2Authenticator(
 										 clientId: "129563854251270",  // For Facebook login, for configure refer http://www.c-sharpcorner.com/article/register-identity-provider-for-new-oauth-application/
-										 scope: "user_about_me",
+										 scope: "email",
 										 authorizeUrl: new Uri("https://www.facebook.com/v2.8/dialog/oauth/"), // These values do not need changing
 										 redirectUrl: new Uri("http://www.facebook.com/connect/login_success.html")// These values do not need changin
 						);
@@ -72,7 +72,7 @@ namespace Hopper_Rides.Droid
 
 					  // Now that we're logged in, make a OAuth2 request to get the user's id.
 
-					  var request = new OAuth2Request("GET", new Uri("https://graph.facebook.com/me?fields=id,email,first_name,last_name,gender,birthday"), null, eventArgs.Account);
+					  var request = new OAuth2Request("GET", new Uri("https://graph.facebook.com/me?fields=id,email,first_name,last_name"), null, eventArgs.Account);
 					  var response = request.GetResponseAsync();
 
 					  var obj = JObject.Parse(response.Result.GetResponseText());
@@ -84,6 +84,7 @@ namespace Hopper_Rides.Droid
 					  OAuthConfig.User.PhoneNumber = user_PhoneNumber;
 					  OAuthConfig.User.FirstName = obj["first_name"].ToString().Replace("\"", "");
 					  OAuthConfig.User.LastName = obj["last_name"].ToString().Replace("\"", "");
+                      OAuthConfig.User.Email = obj["email"].ToString();
 					  //var EmailAddress = obj["email"].ToString();
 					  System.Console.WriteLine("Hello  " + OAuthConfig.User.FirstName + " " + OAuthConfig.User.LastName + " !");
 					  System.Console.WriteLine("Your token: " + OAuthConfig.User.Email + " was assigned in our records"); ;
