@@ -201,7 +201,8 @@ namespace Hopper_Rides
                 {
                     Position = new Position(latitude, longitude),
                     Label = pinLabel,
-                    Icon = BitmapDescriptorFactory.DefaultMarker(color)
+					IsDraggable = true,
+				Icon = BitmapDescriptorFactory.DefaultMarker(color)
                 });
             }
 
@@ -209,19 +210,19 @@ namespace Hopper_Rides
             Position newCenter = PinFunctions.CenterPosition(map);
             map.MoveToRegion(MapSpan.FromCenterAndRadius(newCenter, PinFunctions.LargestRadius(map, newCenter)));
         }
-
+		/*
         void onDropClicked(object sender, EventArgs e)
 		{
 			Pin destination = new Pin();		
 
 			destination.Position = new Position(43.068152, -89.409759);
 			destination.Label = "Hold to Drag";
-			destination.IsDraggable = true;
+			
 			map.Pins.Add(destination);
 
                 
 		}
-
+		*/
         void onSubmitClicked(Object sender, EventArgs e)
         {
             //Add code to submit ride request to database
@@ -269,14 +270,14 @@ namespace Hopper_Rides
 					Placeholder = "Where are you going?",
 					HorizontalTextAlignment = TextAlignment.Start
 				};
-
+				/*
 				Button dropPin = new Button
 				{
 					Text = "Drop Destination Pin",
 					Font = Font.SystemFontOfSize(NamedSize.Small)
 				};
 				dropPin.Clicked += onDropClicked;
-
+				*/
                 Button submit = new Button
                 {
                     Text = "Submit Request",
@@ -309,8 +310,8 @@ namespace Hopper_Rides
                 layout.Children.Add(start, 0, 2, 0, 1);
                 layout.Children.Add(dest, 0, 2, 1, 2);
                 layout.Children.Add(map, 0, 2, 2, 3);
-                layout.Children.Add(dropPin, 0, 3);
-                layout.Children.Add(submit, 1, 3);
+                //layout.Children.Add(dropPin, 0, 3);
+                layout.Children.Add(submit, 0, 2, 3, 4);
                 Content = layout;
 
             }
