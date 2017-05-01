@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.Text;
 using System.Net.Http;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 [assembly: ExportRenderer(typeof(ProviderPage), typeof(LoginRenderer))]
 namespace Hopper_Rides.Droid
@@ -42,7 +43,7 @@ namespace Hopper_Rides.Droid
 				{
 					auth = new OAuth2Authenticator(
 										 clientId: "129563854251270",  // For Facebook login, for configure refer http://www.c-sharpcorner.com/article/register-identity-provider-for-new-oauth-application/
-										 scope: "email",
+										 scope: "user_about_me",
 										 authorizeUrl: new Uri("https://www.facebook.com/v2.8/dialog/oauth/"), // These values do not need changing
 										 redirectUrl: new Uri("http://www.facebook.com/connect/login_success.html")// These values do not need changin
 						);
@@ -63,59 +64,69 @@ namespace Hopper_Rides.Droid
 
 				// After facebook,google and all identity provider login completed 
 				auth.Completed += async (sender, eventArgs) =>
-			  {
-				  if (eventArgs.IsAuthenticated)
-				  {
-					  OAuthConfig.User = new Models.Rider();
-					  // Get and Save User Details 
+				{
+					if (eventArgs.IsAuthenticated)
+					{
+						OAuthConfig.User = new Models.Rider();
+						// Get and Save User Details 
+						List<Models.Rider> req;
+						using (var client = new HttpClient())
+						{
+							req = new List<Models.Rider>();
+							//Debug.WriteLine("Before the request to server");
+							var reqResponse = await client.GetStringAsync("http://thehopper.azurewebsites.net/api/Rider/").ConfigureAwait(false);
+							string reqResponseStr = reqResponse;
+							req = JsonConvert.DeserializeObject<List<Models.Rider>>(reqResponseStr);
 
+						}
+						App.riderID = req[req.Count - 1].ID + 1;
 
-					  // Now that we're logged in, make a OAuth2 request to get the user's id.
+						// Now that we're logged in, make a OAuth2 request to get the user's id.
 
-					  var request = new OAuth2Request("GET", new Uri("https://graph.facebook.com/me?fields=id,email,first_name,last_name"), null, eventArgs.Account);
-					  var response = request.GetResponseAsync();
+						var request = new OAuth2Request("GET", new Uri("https://graph.facebook.com/me?fields=id,email,first_name,last_name,gender,birthday"), null, eventArgs.Account);
+						var response = request.GetResponseAsync();
 
-					  var obj = JObject.Parse(response.Result.GetResponseText());
-
-
-					  //OAuthConfig.User.Email = eventArgs.Account.Properties["access_token"];
-					  //OAuthConfig.User.Email = eventArgs.Account.Properties["email"];
-					  OAuthConfig.User.ID = 20;
-					  OAuthConfig.User.PhoneNumber = user_PhoneNumber;
-					  OAuthConfig.User.FirstName = obj["first_name"].ToString().Replace("\"", "");
-					  OAuthConfig.User.LastName = obj["last_name"].ToString().Replace("\"", "");
-                      OAuthConfig.User.Email = obj["email"].ToString();
-					  //var EmailAddress = obj["email"].ToString();
-					  System.Console.WriteLine("Hello  " + OAuthConfig.User.FirstName + " " + OAuthConfig.User.LastName + " !");
-					  System.Console.WriteLine("Your token: " + OAuthConfig.User.Email + " was assigned in our records"); ;
-
-					  using (var client = new HttpClient())
-					  {
-                          client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
-                          string ser_obj = JsonConvert.SerializeObject(OAuthConfig.User);
-						  var content_post = new StringContent(ser_obj, Encoding.UTF8, "text/json");
-						  //post it to the proper table
+						var obj = JObject.Parse(response.Result.GetResponseText());
+						using (var client = new HttpClient())
+						{
+							client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
+							string ser_obj = JsonConvert.SerializeObject(OAuthConfig.User);
+							var content_post = new StringContent(ser_obj, Encoding.UTF8, "text/json");
+							//post it to the proper table
 							var response_post = await client.PostAsync("http://thehopper.azurewebsites.net/api/riders", content_post);
-                          var responseString_post = await response_post.Content.ReadAsStringAsync();
-                          System.Diagnostics.Debug.WriteLine(responseString_post);
-                      }
-					  //OAuthConfig.PostRider();
-					  //OAuthConfig.SuccessfulLoginAction.Invoke();
-					  await ((ProviderPage)Element).SuccessfulLogin(new MapPage());
+							var responseString_post = await response_post.Content.ReadAsStringAsync();
+							System.Diagnostics.Debug.WriteLine(responseString_post);
+						}
 
-				  }
-				  else
-				  {
-					  // The user cancelled
-				  }
-			  };
+						//OAuthConfig.User.Email = eventArgs.Account.Properties["access_token"];
+						//OAuthConfig.User.Email = eventArgs.Account.Properties["email"];
+						OAuthConfig.User.ID = App.riderID;
+						// var request = new 
+						OAuthConfig.User.PhoneNumber = user_PhoneNumber;
+						OAuthConfig.User.FirstName = obj["first_name"].ToString().Replace("\"", "");
+						OAuthConfig.User.LastName = obj["last_name"].ToString().Replace("\"", "");
+						//var EmailAddress = obj["email"].ToString();
+						System.Console.WriteLine("Hello  " + OAuthConfig.User.FirstName + " " + OAuthConfig.User.LastName + " !");
+						System.Console.WriteLine("Your token: " + OAuthConfig.User.Email + " was assigned in our records"); ;
+
+
+						//OAuthConfig.PostRider();
+						//OAuthConfig.SuccessfulLoginAction.Invoke();
+						await ((ProviderPage)Element).SuccessfulLogin(new MapPage());
+
+					}
+					else
+					{
+						// The user cancelled
+					}
+				};
 
 				activity.StartActivity(auth.GetUI(activity));
 
 			}
 
 
-		
+
 		}
 	}
 }

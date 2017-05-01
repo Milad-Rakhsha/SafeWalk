@@ -9,6 +9,8 @@ namespace Hopper_Rides
 {
 	public partial class App : Application
 	{
+		public static int riderID = 0;
+		public static int activeReqID = 0;
 		public App()
 		{
 			InitializeComponent();
