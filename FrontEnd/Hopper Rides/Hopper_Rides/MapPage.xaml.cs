@@ -233,6 +233,7 @@ namespace Hopper_Rides
         void onSubmitClicked(Object sender, EventArgs e)
         {
             //Add code to submit ride request to database
+
         }
 
 		async void getUserLocation()
@@ -297,29 +298,15 @@ namespace Hopper_Rides
 				//When search bar is clicked
 				dest.Focused += destFocus;
 
-                var layout = new Grid
+                var layout = new StackLayout
                 {
-                    VerticalOptions = LayoutOptions.FillAndExpand,
-                    RowDefinitions =
-                    {
-                        new RowDefinition { Height = GridLength.Auto },
-                        new RowDefinition { Height = GridLength.Auto },
-                        new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
-                        new RowDefinition { Height = GridLength.Auto }
-                    },
-
-                    ColumnDefinitions =
-                    {
-                        new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                        new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
-                    }
+                    VerticalOptions = LayoutOptions.FillAndExpand
                 };
 
-                layout.Children.Add(start, 0, 2, 0, 1);
-                layout.Children.Add(dest, 0, 2, 1, 2);
-                layout.Children.Add(map, 0, 2, 2, 3);
-                //layout.Children.Add(dropPin, 0, 3);
-                layout.Children.Add(submit, 0, 2, 3, 4);
+                layout.Children.Add(start);
+                layout.Children.Add(dest);
+                layout.Children.Add(map);
+                layout.Children.Add(submit);
                 Content = layout;
 
             }
