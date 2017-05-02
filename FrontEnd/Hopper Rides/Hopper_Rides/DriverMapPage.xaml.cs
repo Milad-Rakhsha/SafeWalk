@@ -18,13 +18,17 @@ namespace Hopper_Rides
         List<Models.ActiveRequest> requests;
         List<Models.Rider> riders;
         Map map;
+		double avgLat = 43.068152;
+		double avgLong = -89.409759;
+	
 
+		
 
 		public DriverMapPage()
 		{
 			map = new Map(
 			MapSpan.FromCenterAndRadius(
-					new Position(43.068152, -89.409759), Distance.FromMiles(1)))
+					new Position(avgLat,avgLong), Distance.FromMiles(1.5)))
 			{
 				IsShowingUser = true,
 				HeightRequest = 100,
@@ -123,7 +127,7 @@ namespace Hopper_Rides
                 Pin[] pintime = drawPins(requests.Count(), xC, yC, labels);
                 for (int i = 0; i < pintime.Length; i++)
                 {
-                    DisplayAlert("Debug", "A New Pin was Added!", "YAY");
+                    //DisplayAlert("Debug", "A New Pin was Added!", "YAY");
                     map.Pins.Add(pintime[i]);
                     Debug.WriteLine(pintime[i].Label);
                 }
@@ -132,15 +136,23 @@ namespace Hopper_Rides
                 DisplayAlert("Debug", "Could not get requests (NullArg)", "OK");
             }
 
-
+			map.PinClicked += onPinClick;
+			
+			
             var stack = new StackLayout { Spacing = 0 };
-			stack.Children.Add(name);
-			stack.Children.Add(map);
+			//stack.Children.Add(name);
+			stack.Children.Add(map);			
+			recenterMap();
 			Content = stack;
 		}
 
-
-        async Task<List<Models.ActiveRequest>> getRequestData()
+		void onPinClick(Object sender, EventArgs e)
+		{
+			//Pin p = map.SelectedPin;
+			//Debug.WriteLine(p.Label);
+			DisplayAlert("", "Accept this ride?", "Yes", "No");
+		}
+		async Task<List<Models.ActiveRequest>> getRequestData()
         {
            
             using (var client = new HttpClient())
@@ -189,7 +201,7 @@ namespace Hopper_Rides
             
         }
 
-        /*
+		/*
         async void getPinData()
 		{
 			using (var client = new HttpClient())
@@ -227,19 +239,30 @@ namespace Hopper_Rides
                 //end
             }
         }*/
-		
+		void recenterMap()
+		{	
+			//No guarantee to have all pins on the map.  Just recenters the map around the average lat and long of all pins - 1.5 mile radius
+			var pos = new Xamarin.Forms.GoogleMaps.Position(avgLat, avgLong);			
+			map.MoveToRegion(MapSpan.FromCenterAndRadius(pos, Distance.FromMiles(1.5)));
+		}
 		
 		Pin[] drawPins(int num, double[] xCords, double[] yCords, string[] labels)
 		{
 			Pin[] pins = new Pin[num];
+			double totalLat = 0;
+			double totalLong = 0;
 			for (int i = 0; i < num; i++)
 			{
 				Position tempPos = new Position(xCords[i], yCords[i]);
+				totalLat += xCords[i];
+				totalLong += yCords[i];
 				Pin tempPin = new Pin();
 				tempPin.Position = tempPos;
 				tempPin.Label = labels[i];
 				pins[i] = tempPin;
 			}
+			avgLat = totalLat / num;
+			avgLong = totalLong / num;
 			return pins;
 		}
 	}

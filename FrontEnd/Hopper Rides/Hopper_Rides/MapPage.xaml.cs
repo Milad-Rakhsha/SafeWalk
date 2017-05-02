@@ -23,6 +23,7 @@ namespace Hopper_Rides
 		Position currentPosition;
         SearchBar start;
         SearchBar dest;
+		string myAddress = "Starting Position...";
 
 		public MapPage()
         {
@@ -296,12 +297,12 @@ namespace Hopper_Rides
 				currentPosition = new Position(currentLat,currentLong);
 
 
-
+				/*
 				Debug.WriteLine("Position Latitude: {0}", position.Latitude);
 				Debug.WriteLine("Position Longitude: {0}", position.Longitude);
 				Debug.WriteLine("Position Latitude: {0}", currentLat);
 				Debug.WriteLine("Position Longitude: {0}", currentLong);
-
+				*/
 				map = new Map(
 					MapSpan.FromCenterAndRadius(currentPosition, Distance.FromMiles(1)))
 				{
@@ -309,11 +310,37 @@ namespace Hopper_Rides
 					VerticalOptions = LayoutOptions.FillAndExpand,
                     HorizontalOptions = LayoutOptions.FillAndExpand
 				};
+				
+				//building starting position field with user's current lat/long
+				string text = currentLat + "," + currentLong;
+				
+				//sends request to google
+				String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + text + "&key=" + googleKey;
+				var jsonResponse = await SendRequest(url);
 
-                start = new SearchBar
-                {
-                    Placeholder = "Starting point...",
-                    HorizontalTextAlignment = TextAlignment.Start
+				if (!jsonResponse.IsSuccessStatusCode)
+				{
+					//bad response, debu will output something and Starting position will be set to default which is "Starting Position..."
+					System.Diagnostics.Debug.WriteLine("Bad Coordinates?");
+				}
+				else
+				{
+					string content = await jsonResponse.Content.ReadAsStringAsync();
+
+					System.Diagnostics.Debug.WriteLine(content);
+
+					//Parse JSON data to extract address
+					GeocodeResponse parsedResponse = JsonConvert.DeserializeObject<GeocodeResponse>(content);
+					myAddress = parsedResponse.Results[0].Formatted_address;
+					
+					
+				}
+				
+				
+				start = new SearchBar
+				{					
+					Placeholder = myAddress,
+					HorizontalTextAlignment = TextAlignment.Start
                 };
 
                 start.Focused += startFocus;
@@ -323,14 +350,7 @@ namespace Hopper_Rides
 					Placeholder = "Where are you going?",
 					HorizontalTextAlignment = TextAlignment.Start
 				};
-				/*
-				Button dropPin = new Button
-				{
-					Text = "Drop Destination Pin",
-					Font = Font.SystemFontOfSize(NamedSize.Small)
-				};
-				dropPin.Clicked += onDropClicked;
-				*/
+			
                 Button submit = new Button
                 {
                     Text = "Submit Request",
