@@ -230,10 +230,54 @@ namespace Hopper_Rides
                 
 		}
 		*/
-        void onSubmitClicked(Object sender, EventArgs e)
+        async void onSubmitClicked(Object sender, EventArgs e)
         {
             //Add code to submit ride request to database
+            if (App.riderID == 0)
+            {
+                await DisplayAlert("Bad Login", "Rider ID is invalid, please log in via Facebook", "Back To Main Menu");
+                await Navigation.PushModalAsync(new MyPage());
+            }
+            else if(map.Pins.Count() != 2)
+            {
+                await DisplayAlert("Missing Starting Point or Destination", "Please make sure you have a valid starting point and destination", "OK");
+            }
+            else
+            {
+                List<Models.ActiveRequest> reqList = new List<Models.ActiveRequest>();
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
+                    Debug.WriteLine("Before the request to server");
+                    var reqResponse = await client.GetAsync("http://thehopper.azurewebsites.net/api/ActiveRequests/");
+                    //This will be an IQueryable object
+                    Debug.WriteLine("Before the response from server");
+                    string reqResponseStr = await reqResponse.Content.ReadAsStringAsync();
+                    Debug.WriteLine("After the response from server");
 
+                    //The following will convert the json to an actual rider object
+                    reqList = JsonConvert.DeserializeObject<List<Models.ActiveRequest>>(reqResponseStr);
+                }
+                App.activeReqID = reqList[reqList.Count - 1].ID + 1;
+
+                Models.ActiveRequest req = new Models.ActiveRequest();
+                req.ID = App.activeReqID;
+                req.RiderID = App.riderID;
+                if(map.Pins[0].Label == "Starting Point")
+                {
+                    req.StartLocation = map.Pins[0].Position.Latitude + "," + map.Pins[0].Position.Longitude;
+                    req.EndLocation = map.Pins[1].Position.Latitude + "," + map.Pins[1].Position.Longitude; ;
+                }
+                else
+                {
+                    req.StartLocation = map.Pins[1].Position.Latitude + "," + map.Pins[1].Position.Longitude;
+                    req.EndLocation = map.Pins[0].Position.Latitude + "," + map.Pins[0].Position.Longitude;
+                }
+
+                var subPage = new SubmissionPage(req, start.Text, dest.Text);
+                subPage.ButtonClicked += OnFinalSubmission;
+                await Navigation.PushModalAsync(subPage);
+            }
         }
 
 		async void getUserLocation()
@@ -315,6 +359,15 @@ namespace Hopper_Rides
 				Debug.WriteLine("Unable to get location, may need to increase timeout: " + ex);
 			}
 		}
+
+        async void OnFinalSubmission(Object sender, EventArgs e)
+        {
+            start.Text = "";
+            dest.Text = "";
+            map.Pins.Clear();
+            await Navigation.PopModalAsync();
+            await DisplayAlert("Ride Request Successful!", "Your ride request has been submitted to Hopper Rides.", "Back");
+        }
 
         //Sends HTTP request using given url
         private async Task<HttpResponseMessage> SendRequest(string url)

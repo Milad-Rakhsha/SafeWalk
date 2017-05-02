@@ -70,6 +70,9 @@
       <DependentUpon>ProviderPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Configuration\OAuthConfig.cs" />
+    <Compile Include="SubmissionPage.xaml.cs">
+      <DependentUpon>SubmissionPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainPage.xaml">
@@ -161,8 +164,12 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Configuration\" />
+    <EmbeddedResource Include="SubmissionPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

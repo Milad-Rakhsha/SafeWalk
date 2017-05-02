@@ -34,9 +34,9 @@ namespace Hopper_Rides
 			}
 		}
 
-		 void signin(Object sender, EventArgs e)
+		async void signin(Object sender, EventArgs e)
 		{
-			 Navigation.PushAsync(new MyPage());
+			 await Navigation.PushModalAsync(new MyPage());
 
 		}
 

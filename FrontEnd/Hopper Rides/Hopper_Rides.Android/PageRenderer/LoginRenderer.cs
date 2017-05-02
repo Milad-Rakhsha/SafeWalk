@@ -79,6 +79,7 @@ namespace Hopper_Rides.Droid
                             System.Diagnostics.Debug.WriteLine(reqResponseStr);
                             req = JsonConvert.DeserializeObject<List<Models.Rider>>(reqResponseStr);
 						}
+
 						App.riderID = req[req.Count - 1].ID + 1;
 
                         // Now that we're logged in, make a OAuth2 request to get the user's id.
@@ -87,26 +88,44 @@ namespace Hopper_Rides.Droid
 
 						var obj = JObject.Parse(response.GetResponseText());
 
-                        OAuthConfig.User.ID = App.riderID;
                         OAuthConfig.User.PhoneNumber = user_PhoneNumber;
                         OAuthConfig.User.FirstName = obj["first_name"].ToString().Replace("\"", "");
                         OAuthConfig.User.LastName = obj["last_name"].ToString().Replace("\"", "");
                         OAuthConfig.User.Email = obj["email"].ToString();
+                        bool newRider = true;
 
+                        foreach (var rider in req)
+                        {
+                            if (OAuthConfig.User.Email.Equals(rider.Email) && OAuthConfig.User.PhoneNumber.Equals(rider.PhoneNumber))
+                            {
+                                newRider = false;
+                                App.riderID = rider.ID;
+                            }
+                        }
+
+                        OAuthConfig.User.ID = App.riderID;
                         System.Diagnostics.Debug.WriteLine("Hello  " + OAuthConfig.User.FirstName + " " + OAuthConfig.User.LastName + " !");
-                        System.Diagnostics.Debug.WriteLine("Your email: " + OAuthConfig.User.Email + " was assigned in our records as Rider ID #" + OAuthConfig.User.ID);
 
-                        using (var client = new HttpClient())
-						{
-							client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
-							string ser_obj = JsonConvert.SerializeObject(OAuthConfig.User);
-							var content_post = new StringContent(ser_obj, Encoding.UTF8, "text/json");
-							//post it to the proper table
-							var response_post = await client.PostAsync("http://thehopper.azurewebsites.net/api/riders", content_post);
-							var responseString_post = await response_post.Content.ReadAsStringAsync();
-                            System.Diagnostics.Debug.WriteLine("Here's the POST response");
-							System.Diagnostics.Debug.WriteLine(responseString_post);
-						}
+                        if (newRider)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Your email: " + OAuthConfig.User.Email + " was assigned in our records as Rider ID #" + OAuthConfig.User.ID);
+
+                            using (var client = new HttpClient())
+                            {
+                                client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
+                                string ser_obj = JsonConvert.SerializeObject(OAuthConfig.User);
+                                var content_post = new StringContent(ser_obj, Encoding.UTF8, "text/json");
+                                //post it to the proper table
+                                var response_post = await client.PostAsync("http://thehopper.azurewebsites.net/api/riders", content_post);
+                                var responseString_post = await response_post.Content.ReadAsStringAsync();
+                                System.Diagnostics.Debug.WriteLine("Here's the POST response");
+                                System.Diagnostics.Debug.WriteLine(responseString_post);
+                            }
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("Welcome back, your rider ID is " + OAuthConfig.User.ID);
+                        }
                         
 						await ((ProviderPage)Element).SuccessfulLogin(new MapPage());
 					}

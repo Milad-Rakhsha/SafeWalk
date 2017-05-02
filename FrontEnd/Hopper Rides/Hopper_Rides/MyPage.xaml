@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>  
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:Hopper_Rides" x:Class="Hopper_Rides.MyPage">  
-    <StackLayout>
-
-		<Entry x:Name="UserPhoneNumber"
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:Hopper_Rides" x:Class="Hopper_Rides.MyPage">
+    <StackLayout
+        VerticalOptions="Center">
+        <Entry x:Name="UserPhoneNumber"
            Placeholder="Phone number"
            VerticalOptions="Center"
            HorizontalOptions="CenterAndExpand" 

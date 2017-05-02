@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Hopper_Rides.SubmissionPage">
+    <StackLayout
+        VerticalOptions="FillAndExpand"
+        Padding="0,100,0,0">
+        <Label x:Name="start"
+               Text="Starting Point: "
+               LineBreakMode="WordWrap"
+               FontSize="Medium"
+               />
+        <Label x:Name="dest"
+               Text="Destination: "
+               LineBreakMode="WordWrap"
+               FontSize="Medium"
+               />
+        <Picker x:Name="passengerCount"
+                Title="Select Number of Passengers"
+                />
+        <Label Text="Comment:" />
+        <Editor x:Name="comment"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                />
+        <Button x:Name="submit"
+                Text="Submit Request"
+                BackgroundColor="Red"
+                Clicked="submitClicked"
+                />
+    </StackLayout>
+</ContentPage>

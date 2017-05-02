@@ -96,8 +96,17 @@ namespace Hopper_Rides
                             //    Position = new Position(),
                             //    Label = riders.ElementAt(j).FirstName + " " + riders.ElementAt(j).LastName
                             //};
-                            xC[i] = Double.Parse(requests.ElementAt(i).StartLocation.Split(',')[0]);
-                            yC[i] = Double.Parse(requests.ElementAt(i).StartLocation.Split(',')[1]);
+                            try
+                            {
+                                xC[i] = Double.Parse(requests.ElementAt(i).StartLocation.Split(',')[0]);
+                                yC[i] = Double.Parse(requests.ElementAt(i).StartLocation.Split(',')[1]);
+                            } catch(FormatException e)
+                            {
+                                DisplayAlert("Debug", "Could not parse coordinates, defaulting to Comp Sci Building." +
+                                    "This shouldn't happen after garbage test data cleared from database.", "OK");
+                                xC[i] = 43.0743486;
+                                yC[i] = -89.4071083;
+                            }
                             //if(riders.ElementAt(j).FirstName == null || riders.ElementAt(j).LastName == null)
                             //{
                             //    labels[i] = riders.ElementAt(j).ID.ToString();
