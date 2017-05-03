@@ -3,55 +3,41 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Hopper_Rides"
              x:Class="Hopper_Rides.MainPage"
-             BackgroundColor="Gray">
-    <StackLayout Spacing="50" x:Name="layout"
+             BackgroundColor="White">
+    <StackLayout x:Name="layout"
         VerticalOptions="Center">
 
-        <StackLayout Spacing="0">
-            <Entry x:Name="UsernameEntry"
-           Placeholder=" Username"
-           VerticalOptions="Center"
-           HorizontalOptions="CenterAndExpand"               
-           BackgroundColor="Silver"
-           TextColor="Black"    
-           WidthRequest="100"      
+        <Image HorizontalOptions="Center"
+               Source="hopperrides.png"
                />
-                        
-         <Entry x:Name="PasswordEntry"
-           Placeholder="Password"
-           IsPassword="True"
-           VerticalOptions="Center"
-           HorizontalOptions="CenterAndExpand"
-           BackgroundColor="Silver"
-           TextColor="Black"    
-           WidthRequest="100"      
-               />
+
+        <StackLayout Spacing="75">
+            
+            <Button Text="Driver Login"
+               VerticalOptions="Center"
+               HorizontalOptions="CenterAndExpand"    
+               TextColor="Black"  
+               BackgroundColor="Tomato"     
+               Clicked="onDriverLogin"
+			    />
+
+		    <Button Text="Rider Login"
+               VerticalOptions="Center"
+               HorizontalOptions="CenterAndExpand"    
+               TextColor="Black"  
+               BackgroundColor="Tomato"     
+               Clicked="signin"
+			    />
+
+		    <Button Text="TestSubmit"
+               VerticalOptions="Center"
+               HorizontalOptions="CenterAndExpand"    
+               TextColor="Black"  
+               BackgroundColor="Tomato"     
+               Clicked="sendRequest" 		
+                    />
+
         </StackLayout>
-
-		<Button Text="Login"
-           VerticalOptions="Center"
-           HorizontalOptions="CenterAndExpand"    
-           TextColor="Black"  
-           BackgroundColor="Silver"     
-           Clicked="onLogin"
-			/>
-
-		<Button Text="Real-Login"
-           VerticalOptions="Center"
-           HorizontalOptions="CenterAndExpand"    
-           TextColor="Black"  
-           BackgroundColor="Silver"     
-           Clicked="signin"
-			/>
-
-		<Button Text="TestSubmit"
-           VerticalOptions="Center"
-           HorizontalOptions="CenterAndExpand"    
-           TextColor="Black"  
-           BackgroundColor="Silver"     
-           Clicked="sendRequest" 		
-                />
-
     </StackLayout>
 
 </ContentPage>

@@ -37,7 +37,8 @@ namespace Hopper_Rides
             stack.Children.Add(new ActivityIndicator
             {
                 IsRunning = true,
-                VerticalOptions = LayoutOptions.Center
+                VerticalOptions = LayoutOptions.Center,
+                Color = Color.Tomato
             });
             Content = stack;
 
@@ -354,7 +355,7 @@ namespace Hopper_Rides
                 Button submit = new Button
                 {
                     Text = "Submit Request",
-                    BackgroundColor = Color.Red
+                    BackgroundColor = Color.Tomato
                 };
                 submit.Clicked += onSubmitClicked;
 

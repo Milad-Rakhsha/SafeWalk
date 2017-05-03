@@ -12,6 +12,6 @@
            HeightRequest="50"  
            WidthRequest="250"      
                />
-		<Button Text="FaceBook" Clicked="LoginClick" Image="FACEBOOK.png" HeightRequest="50" /> 
-	</StackLayout>  
+        <Image x:Name="facebook" Source="FACEBOOK.png" HorizontalOptions="Center" />
+    </StackLayout>  
 </ContentPage> 

@@ -53,7 +53,8 @@ namespace Hopper_Rides
             loading = new ActivityIndicator
             {
                 IsRunning = true,
-                VerticalOptions = LayoutOptions.Start
+                VerticalOptions = LayoutOptions.Start,
+                Color = Color.Tomato
             };
 
             if (!isDestination)
@@ -107,6 +108,7 @@ namespace Hopper_Rides
                 //Set up list template to display the descriptions of the autocomplete predictions
                 var temp = new DataTemplate(typeof(TextCell));
                 temp.SetBinding(TextCell.TextProperty, "description");
+                temp.SetValue(TextCell.TextColorProperty, Color.Black);
 
                 //Set up the list with the autocomplete predictions
                 list.ItemsSource = pParsed.predictions;

@@ -4,28 +4,47 @@
              x:Class="Hopper_Rides.SubmissionPage">
     <StackLayout
         VerticalOptions="FillAndExpand"
-        Padding="0,100,0,0">
+        Spacing="25">
+        <StackLayout.Padding>
+            <OnPlatform x:TypeArguments="Thickness"
+                        iOS="0, 20, 0, 0" />
+        </StackLayout.Padding>
+        <Label Text="Starting Point:"
+               FontSize="Large"
+               />
         <Label x:Name="start"
-               Text="Starting Point: "
+               Text=""
                LineBreakMode="WordWrap"
                FontSize="Medium"
+               TextColor="IndianRed"
+               />
+        <Label Text="Destination:"
+               FontSize="Large"
                />
         <Label x:Name="dest"
-               Text="Destination: "
+               Text=""
                LineBreakMode="WordWrap"
                FontSize="Medium"
+               TextColor="IndianRed"
                />
         <Picker x:Name="passengerCount"
                 Title="Select Number of Passengers"
                 />
-        <Label Text="Comment:" />
-        <Editor x:Name="comment"
-                VerticalOptions="FillAndExpand"
-                HorizontalOptions="FillAndExpand"
-                />
+        <Label Text="Comment:"
+               FontSize="Large" />
+        <StackLayout BackgroundColor="Black"
+                     Padding="1"
+                     VerticalOptions="FillAndExpand"
+                     HorizontalOptions="FillAndExpand" >
+            <Editor x:Name="comment"
+                    VerticalOptions="FillAndExpand"
+                    HorizontalOptions="FillAndExpand"
+                    BackgroundColor="LightCyan"
+                    />
+        </StackLayout>
         <Button x:Name="submit"
                 Text="Submit Request"
-                BackgroundColor="Red"
+                BackgroundColor="Tomato"
                 Clicked="submitClicked"
                 />
     </StackLayout>

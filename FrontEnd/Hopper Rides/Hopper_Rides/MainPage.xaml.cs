@@ -19,19 +19,12 @@ namespace Hopper_Rides
 		{
 			InitializeComponent();
 			Title = "Welcome to Hopper Rides!";
+            NavigationPage.SetHasNavigationBar(this, false);
 		}
 
-		async void onLogin(Object sender, EventArgs e)
+		async void onDriverLogin(Object sender, EventArgs e)
 		{
-			if (!String.IsNullOrEmpty(UsernameEntry.Text) && UsernameEntry.Text.Equals("Driver", StringComparison.OrdinalIgnoreCase))
-			{
-			    await Navigation.PushModalAsync(new DriverListPage());
-			}
-			else
-			{
-			    //This is a rider
-			    await Navigation.PushModalAsync(new MapPage());
-			}
+			await Navigation.PushModalAsync(new DriverListPage());
 		}
 
 		async void signin(Object sender, EventArgs e)
