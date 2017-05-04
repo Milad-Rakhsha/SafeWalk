@@ -20,11 +20,10 @@ namespace Hopper_Rides
         Map map;
 		double avgLat = 43.068152;
 		double avgLong = -89.409759;
-	
+        string googleKey = "AIzaSyA3aaKi6HVMDLcvez0EGcMn6Fsngl5lC5g";
 
-		
 
-		public DriverMapPage()
+        public DriverMapPage()
 		{
 			map = new Map(
 			MapSpan.FromCenterAndRadius(
@@ -119,7 +118,7 @@ namespace Hopper_Rides
                             //{
                             //    labels[i] = riders.ElementAt(j).FirstName + " " + riders.ElementAt(j).LastName;
                             //}
-                            labels[i] = riders.ElementAt(j).FirstName;
+                            labels[i] = "" + requests[i].ID;
                            
                         }
                     }
@@ -136,23 +135,72 @@ namespace Hopper_Rides
                 DisplayAlert("Debug", "Could not get requests (NullArg)", "OK");
             }
 
-			map.PinClicked += onPinClick;
+			map.SelectedPinChanged += onPinClick;
 			
 			
             var stack = new StackLayout { Spacing = 0 };
 			//stack.Children.Add(name);
 			stack.Children.Add(map);			
 			recenterMap();
-			Content = stack;
+            Content = stack;
 		}
 
-		void onPinClick(Object sender, EventArgs e)
-		{
-			//Pin p = map.SelectedPin;
-			//Debug.WriteLine(p.Label);
-			DisplayAlert("", "Accept this ride?", "Yes", "No");
-		}
-		async Task<List<Models.ActiveRequest>> getRequestData()
+        async void onPinClick(Object sender, SelectedPinChangedEventArgs e)
+        {
+            if(e.SelectedPin != null)
+            {
+                int selectedID = Int32.Parse(e.SelectedPin.Label);
+                Models.ActiveRequest request = null;
+                foreach (var req in requests)
+                {
+                    if(req.ID == selectedID)
+                    {
+                        request = req;
+                    }
+                }
+
+                Debug.WriteLine("Ride ID = " + request.ID);
+                string startAddr = await getAddress(request.StartLocation);
+                string destAddr = await getAddress(request.EndLocation);
+
+                //Display info about request and option to accept ride
+                await DisplayAlert("Accept this ride?", "Location: " + startAddr + "\n\nDestination: " + destAddr + "\n\nRequest time: " + request.StartTime.ToString() + "\n\nNumber of Passengers: " + request.NumPassangers, "Yes", "No");
+            }
+        }
+
+        async Task<string> getAddress(string LatLng)
+        {
+            string url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + LatLng + "&key=" + googleKey;
+            var jsonResponse = await SendRequest(url);
+
+            if (!jsonResponse.IsSuccessStatusCode)
+            {
+                System.Diagnostics.Debug.WriteLine("Bad Coordinates?");
+                return null;
+            }
+            else
+            {
+                string content = await jsonResponse.Content.ReadAsStringAsync();
+
+                System.Diagnostics.Debug.WriteLine(content);
+
+                //Parse JSON data to extract address
+                GeocodeResponse parsedResponse = JsonConvert.DeserializeObject<GeocodeResponse>(content);
+                return parsedResponse.Results[0].Formatted_address;
+            }
+        }
+
+        //Sends HTTP request using given url
+        private async Task<HttpResponseMessage> SendRequest(string url)
+        {
+            HttpClient client = new HttpClient();
+            var uri = new Uri(url);
+
+            HttpResponseMessage response = await client.GetAsync(uri);
+            return response;
+        }
+
+        async Task<List<Models.ActiveRequest>> getRequestData()
         {
            
             using (var client = new HttpClient())
