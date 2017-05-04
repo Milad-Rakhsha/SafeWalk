@@ -18,6 +18,7 @@ namespace Hopper_Rides
         List<Models.ActiveRequest> requests;
         List<Models.Rider> riders;
         Map map;
+        Label refresh;
 		double avgLat = 43.068152;
 		double avgLong = -89.409759;
         string googleKey = "AIzaSyA3aaKi6HVMDLcvez0EGcMn6Fsngl5lC5g";
@@ -25,7 +26,19 @@ namespace Hopper_Rides
 
         public DriverMapPage()
 		{
-			map = new Map(
+            var stack = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.CenterAndExpand
+            };
+            stack.Children.Add(new ActivityIndicator
+            {
+                IsRunning = true,
+                VerticalOptions = LayoutOptions.Center,
+                Color = Color.Tomato
+            });
+            Content = stack;
+
+            map = new Map(
 			MapSpan.FromCenterAndRadius(
 					new Position(avgLat,avgLong), Distance.FromMiles(1.5)))
 			{
@@ -35,48 +48,33 @@ namespace Hopper_Rides
 				VerticalOptions = LayoutOptions.FillAndExpand
 			};
 
-
-			var name = new Label
-			{
-				Text = "You are a driver",
-				//VerticalTextAlignment = TextAlignment.Center,
-				HorizontalTextAlignment = TextAlignment.Center
+            refresh = new Label
+            {
+                Text = "Tap to Refresh",
+                //VerticalTextAlignment = TextAlignment.Center,
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
 			};
+            var tap = new TapGestureRecognizer();
+            tap.Tapped += refreshData;
+            refresh.GestureRecognizers.Add(tap);
 
-            //Hardcoded examples
-            //double[] xC = new double[] { 43.0765374, 43.071788, 43.072705, 43.074792, 43.074893, 43.074707, 43.069408 };
-            //double[] yC = new double[] { -89.399286, -89.407911, -89.399882, -89.38437, -89.388267, -89.395909, -89.396661 };
-            //string[] descrip = new string[] { "Union", "Union South", "Vilas hall", "Capitol", "Overture Center", "Brats", "Kohl Center" };
-            //Pin[] pintime = drawPins(7, xC, yC, descrip);
-            //for (int i = 0; i < pintime.Length; i++)
-            //{
-            //	map.Pins.Add(pintime[i]);
-            //}
+			map.SelectedPinChanged += onPinClick;
 
+            refreshData(this, null);
+		}
+
+        async void refreshData(Object sender, EventArgs e)
+        {
             try
             {
-               // DisplayAlert("Debug", requests.Count().ToString(), "OK");
-
-                //getRiderData();
-                Task<List<Models.ActiveRequest>> newReqTask = getRequestData();
-                Debug.WriteLine("After getRequestDatae()");
-                
-                //newReqTask.Wait();
-                List<Models.ActiveRequest> requests = newReqTask.Result;
+                List<Models.ActiveRequest> requests = await getRequestData();
                 Debug.WriteLine("After result returned");
                 this.requests = requests;
                 Debug.WriteLine("Result set");
-
-
-                Task<List<Models.Rider>> newRidTask = getRiderData();
-
-                //newRidTask.Wait();
-                List<Models.Rider> riders = newRidTask.Result;
+                List<Models.Rider> riders = await getRiderData();
                 this.riders = riders;
 
-                //riders.Add(new Models.Rider());
-
-                //getPinData();
                 //for every request,
                 double[] xC = new double[requests.Count()];
                 double[] yC = new double[requests.Count()];
@@ -86,64 +84,39 @@ namespace Hopper_Rides
 
                 for (int i = 0; i < requests.Count(); i++)
                 {
-                    //find the rider corresponding to that request
-                    for (int j = 0; j < riders.Count; j++)
+                    labels[i] = "" + requests[i].ID;
+                    try
                     {
-                        Debug.WriteLine("Does " + riders.ElementAt(j).ID + " == " + requests.ElementAt(i).RiderID + "?");
-                        if (riders.ElementAt(j).ID == requests.ElementAt(i).RiderID)
-                        {
-                            Debug.WriteLine("Match!" + riders.ElementAt(j).ID + " = " + requests.ElementAt(i).RiderID);
-                            //IDs are the same, construct a pin and place it on the map
-                            //Pin pin = new Pin
-                            //{
-                            //    Position = new Position(),
-                            //    Label = riders.ElementAt(j).FirstName + " " + riders.ElementAt(j).LastName
-                            //};
-                            try
-                            {
-                                xC[i] = Double.Parse(requests.ElementAt(i).StartLocation.Split(',')[0]);
-                                yC[i] = Double.Parse(requests.ElementAt(i).StartLocation.Split(',')[1]);
-                            } catch(FormatException e)
-                            {
-                                DisplayAlert("Debug", "Could not parse coordinates, defaulting to Comp Sci Building." +
-                                    "This shouldn't happen after garbage test data cleared from database.", "OK");
-                                xC[i] = 43.0743486;
-                                yC[i] = -89.4071083;
-                            }
-                            //if(riders.ElementAt(j).FirstName == null || riders.ElementAt(j).LastName == null)
-                            //{
-                            //    labels[i] = riders.ElementAt(j).ID.ToString();
-                            //}
-                            //else
-                            //{
-                            //    labels[i] = riders.ElementAt(j).FirstName + " " + riders.ElementAt(j).LastName;
-                            //}
-                            labels[i] = "" + requests[i].ID;
-                           
-                        }
+                        xC[i] = Double.Parse(requests.ElementAt(i).StartLocation.Split(',')[0]);
+                        yC[i] = Double.Parse(requests.ElementAt(i).StartLocation.Split(',')[1]);
+                    } catch (FormatException ex)
+                    {
+                        await DisplayAlert("Debug", "Could not parse coordinates, defaulting to Comp Sci Building." +
+                            "This shouldn't happen after garbage test data cleared from database.", "OK");
+                        xC[i] = 43.0743486;
+                        yC[i] = -89.4071083;
                     }
                 }
+
                 Pin[] pintime = drawPins(requests.Count(), xC, yC, labels);
+                map.Pins.Clear();
                 for (int i = 0; i < pintime.Length; i++)
                 {
                     //DisplayAlert("Debug", "A New Pin was Added!", "YAY");
                     map.Pins.Add(pintime[i]);
                     Debug.WriteLine(pintime[i].Label);
                 }
-            } catch(ArgumentNullException e)
-            {
-                DisplayAlert("Debug", "Could not get requests (NullArg)", "OK");
+                recenterMap();
+                var stack = new StackLayout { Spacing = 0 };
+                stack.Children.Add(refresh);
+                stack.Children.Add(map);
+                Content = stack;
             }
-
-			map.SelectedPinChanged += onPinClick;
-			
-			
-            var stack = new StackLayout { Spacing = 0 };
-			//stack.Children.Add(name);
-			stack.Children.Add(map);			
-			recenterMap();
-            Content = stack;
-		}
+            catch (ArgumentNullException ex)
+            {
+                await DisplayAlert("Debug", "Could not get requests (NullArg)", "OK");
+            }
+        }
 
         async void onPinClick(Object sender, SelectedPinChangedEventArgs e)
         {

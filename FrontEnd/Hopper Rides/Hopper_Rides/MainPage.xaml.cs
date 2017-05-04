@@ -24,7 +24,7 @@ namespace Hopper_Rides
 
 		async void onDriverLogin(Object sender, EventArgs e)
 		{
-			await Navigation.PushModalAsync(new DriverListPage());
+			await Navigation.PushModalAsync(new DriverMapPage());
 		}
 
 		async void signin(Object sender, EventArgs e)
