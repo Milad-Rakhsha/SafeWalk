@@ -23,7 +23,6 @@ namespace Hopper_Rides
 		double avgLong = -89.409759;
         string googleKey = "AIzaSyA3aaKi6HVMDLcvez0EGcMn6Fsngl5lC5g";
 
-
         public DriverMapPage()
 		{
             var stack = new StackLayout
@@ -103,7 +102,11 @@ namespace Hopper_Rides
                 for (int i = 0; i < pintime.Length; i++)
                 {
                     //DisplayAlert("Debug", "A New Pin was Added!", "YAY");
-                    map.Pins.Add(pintime[i]);
+                    if (requests[i].EndTime == null)
+                        map.Pins.Add(pintime[i]);
+                    else
+                        Debug.WriteLine("Found completed ride!");
+
                     Debug.WriteLine(pintime[i].Label);
                 }
                 recenterMap();
@@ -137,8 +140,39 @@ namespace Hopper_Rides
                 string destAddr = await getAddress(request.EndLocation);
 
                 //Display info about request and option to accept ride
-                await DisplayAlert("Accept this ride?", "Location: " + startAddr + "\n\nDestination: " + destAddr + "\n\nRequest time: " + request.StartTime.ToString() + "\n\nNumber of Passengers: " + request.NumPassangers, "Yes", "No");
+                var accept = await DisplayAlert("Accept this ride?", "Location: " + startAddr + "\n\nDestination: " + destAddr + "\n\nRequest time: " + request.StartTime.ToString() + "\n\nNumber of Passengers: " + request.NumPassangers, "Yes", "No");
+                if (accept)
+                {
+                    acceptRide(request, destAddr);
+                }
             }
+        }
+
+        async void acceptRide(Models.ActiveRequest request, string destAddr)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
+                request.EndTime = System.DateTime.Now;
+
+                //Delete old request
+                var response_post = await client.DeleteAsync("http://thehopper.azurewebsites.net/api/ActiveRequests/" + request.ID);
+                var responseString_post = await response_post.Content.ReadAsStringAsync();
+                Debug.WriteLine("Old request deleted");
+                Debug.WriteLine(responseString_post);
+
+                //Create new request with valid EndTime
+                string ser_obj = JsonConvert.SerializeObject(request);
+                var content_post = new StringContent(ser_obj, Encoding.UTF8, "text/json");
+                //post it to the proper table
+                response_post = await client.PostAsync("http://thehopper.azurewebsites.net/api/ActiveRequests/", content_post);
+                responseString_post = await response_post.Content.ReadAsStringAsync();
+                Debug.WriteLine("New request created with EndTime");
+                Debug.WriteLine(responseString_post);
+            }
+
+            await DisplayAlert("Ride Accepted", "Destination: " + destAddr, "Back");
+            refreshData(this, null);
         }
 
         async Task<string> getAddress(string LatLng)

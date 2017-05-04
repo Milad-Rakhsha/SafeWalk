@@ -77,11 +77,6 @@ namespace Hopper_Rides
             searchBar.Focus();
         }
 
-        protected void OnLayoutChange(Object sender, EventArgs e)
-        {
-            searchBar.Focus();
-        }
-
         async void OnTextChanged(Object sender, EventArgs e)
         {
             //Add temporary loading indicator

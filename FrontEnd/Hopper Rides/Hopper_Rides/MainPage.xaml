@@ -5,7 +5,8 @@
              x:Class="Hopper_Rides.MainPage"
              BackgroundColor="White">
     <StackLayout x:Name="layout"
-        VerticalOptions="Center">
+        VerticalOptions="Center"
+                 Spacing="25">
 
         <Image HorizontalOptions="Center"
                Source="hopperrides.png"
@@ -21,21 +22,13 @@
                Clicked="onDriverLogin"
 			    />
 
-		    <Button Text="Rider Login"
+            <Button Text="Rider Login"
                VerticalOptions="Center"
                HorizontalOptions="CenterAndExpand"    
                TextColor="Black"  
                BackgroundColor="Tomato"     
                Clicked="signin"
 			    />
-
-		    <Button Text="TestSubmit"
-               VerticalOptions="Center"
-               HorizontalOptions="CenterAndExpand"    
-               TextColor="Black"  
-               BackgroundColor="Tomato"     
-               Clicked="sendRequest" 		
-                    />
 
         </StackLayout>
     </StackLayout>
